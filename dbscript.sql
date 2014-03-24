@@ -1,4 +1,4 @@
-/* For New Install copy lines 2 - 83 */
+/* For New Install copy lines 2 - 84 */
 CREATE TABLE IF NOT EXISTS `subcontractors` (
   `subcontractors_id` int(10) unsigned NOT NULL auto_increment,
   `short_name` varchar(20) NOT NULL default '',
@@ -85,7 +85,7 @@ INSERT IGNORE INTO admin_pages (page_key,language_key,main_page,page_params,menu
 
 =============================================================================================
 
-/* If upgrading copy lines 88 - 140 */
+/* If upgrading copy lines 90 - 142 */
 /*
 SELECT @poid:=configuration_group_id
 FROM configuration_group
@@ -144,7 +144,7 @@ INSERT IGNORE INTO admin_pages (page_key,language_key,main_page,page_params,menu
 
 ============================================================================================
 
-/* To uninstall copy lines 147 - 170 */
+/* To uninstall copy lines 149 - 172 */
 /*
 DROP TABLE IF EXISTS `subcontractors`;
 
