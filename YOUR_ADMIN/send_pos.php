@@ -502,7 +502,7 @@ if ($_POST[reviewthensend] == 'yes') {
 <?php echo REVIEW_EMAIL_SEND_EMAIL_TO; ?>&nbsp;<input type="text" name="eaddress" size="125" value="<?php echo $adresdo; ?>" /><br /><br />
 <textarea rows="30" name="ebody"><?php echo $newzawartosc; ?></textarea>
 <input type="hidden" name="includepackinglistoption" value="<?php echo $_POST[includepackinglistoption]; ?>" /><input type="hidden" name="ereview" value="yes" /><br /><br />
-<input type="image" src="includes/languages/english/images/buttons/button_send.gif" name='insert' ONCLICK="javascript:document.pos.submit();"><br /><br />
+<input class="normal_button button" type="button" value="<?php echo IMAGE_SEND; ?>" name='insert' ONCLICK="javascript:document.pos.submit();"><br /><br />
 <?php echo REVIEW_AND_SUBMIT_WARNING; ?></center>
 </form><?php } else {   $html_msg['EMAIL_MESSAGE_HTML'] = str_replace('
 ','<br />',$newzawartosc);
@@ -558,7 +558,7 @@ if($_POST[reviewthensend] != 'yes') { ?>
 
 //przejscie do szbalonu ktory wyswietla wyslane juz e-maile z starymi numerami po
 		   echo	"<form name='drugi' action='send_pos.php' method='post'>
-		   <input type='submit' name='old' value='".BUTTON_NEW."'>
+		   <input class='normal_button button' type='submit' name='old' value='".BUTTON_NEW."'>
 		   </form><br>&nbsp;";
 //wyszukiwarka
 		   echo '<form name="wyszukiwarka" action="send_pos.php" method="POST">
@@ -576,7 +576,7 @@ if($_POST[reviewthensend] != 'yes') { ?>
 			{
 
 			echo "<form name='pierwszy' action='send_pos.php' method='post'>
-		   <input type='submit' name='old' value='".BUTTON_OLD."'>
+		   <input class='normal_button button' type='submit' name='old' value='".BUTTON_OLD."'>
 		   <input type='hidden' name='co' value='old'>
 		   </form><br>&nbsp;";
 			}
@@ -795,7 +795,7 @@ echo "<tr class='dataTableRow'>".
 <?php if (PO_SEND_PACKING_LISTS == 3) { ?>
 <?php echo TABLE_INCLUDE_PACKINGLIST_OPTION; ?><input type="checkbox" name="includepackinglistoption" value="yes">&nbsp;&nbsp;&nbsp;&nbsp; <?php } ?>
 <?php if (PO_SEND_PACKING_LISTS != 0) { ?>
-<?php echo TABLE_ADD_CUSTOMERS_COMMENTS_TO_PACKING_LIST; ?><input type="checkbox" name="addcommentstoplist" value="1" CHECKED>&nbsp;&nbsp;&nbsp;&nbsp;<?php } echo TABLE_REVIEW_EMAIL_OPTION; ?><input type="checkbox" name="reviewthensend" value="yes" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="image" src="includes/languages/english/images/buttons/button_send.gif" name='insert' ONCLICK="javascript:document.pos.submit();"></td></tr></form>
+<?php echo TABLE_ADD_CUSTOMERS_COMMENTS_TO_PACKING_LIST; ?><input type="checkbox" name="addcommentstoplist" value="1" CHECKED>&nbsp;&nbsp;&nbsp;&nbsp;<?php } echo TABLE_REVIEW_EMAIL_OPTION; ?><input type="checkbox" name="reviewthensend" value="yes" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="normal_button button" type="button" value="<?php echo IMAGE_SEND; ?>" name='insert' ONCLICK="javascript:document.pos.submit();"></td></tr></form>
 
 		</table>
 <?php }
@@ -952,7 +952,7 @@ $ordersaddress = $orderaddresscompany.$row2[8].$orderaddresssuburb."<br />".$row
 <?php if (PO_SEND_PACKING_LISTS == 3) { ?>
 <?php echo TABLE_INCLUDE_PACKINGLIST_OPTION; ?><input type="checkbox" name="includepackinglistoption" value="yes">&nbsp;&nbsp;&nbsp;&nbsp; <?php } ?>
 <?php if (PO_SEND_PACKING_LISTS != 0) { ?>
-<?php echo TABLE_ADD_CUSTOMERS_COMMENTS_TO_PACKING_LIST; ?><input type="checkbox" name="addcommentstoplist" value="1" CHECKED />&nbsp;&nbsp;&nbsp;&nbsp;<?php } echo TABLE_REVIEW_EMAIL_OPTION; ?><input type="checkbox" name="reviewthensend" value="yes" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="image" src="includes/languages/english/images/buttons/button_send.gif" name='insert' ONCLICK="javascript:document.pos.submit();"></td></tr></form>
+<?php echo TABLE_ADD_CUSTOMERS_COMMENTS_TO_PACKING_LIST; ?><input type="checkbox" name="addcommentstoplist" value="1" CHECKED />&nbsp;&nbsp;&nbsp;&nbsp;<?php } echo TABLE_REVIEW_EMAIL_OPTION; ?><input type="checkbox" name="reviewthensend" value="yes" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="normal_button button" type="button" value="<?php echo IMAGE_SEND; ?>" name='insert' ONCLICK="javascript:document.pos.submit();"></td></tr></form>
 <tr><td colspan='9'align='center'><br><br></td></tr>
 		</table>
 <?php } ?>

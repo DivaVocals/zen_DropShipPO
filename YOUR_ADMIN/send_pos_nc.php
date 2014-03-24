@@ -6,13 +6,13 @@
 require('includes/application_top.php');
 require(DIR_WS_CLASSES . 'currencies.php');
 
-define('FPDF_FONTPATH','fpdf/font/');
+define('FPDF_FONTPATH','includes/classes/fpdf/font/');
 require('pdfpack.php');
 
 //load email templates
-@ $wp1 = fopen("../email/email_header.txt", 'r');
-@ $wp2 = fopen("../email/email_products.txt", 'r');
-@ $wp3 = fopen("../email/email_footer.txt", 'r');
+@ $wp1 = fopen("../email/email_dropship_po_header.txt", 'r');
+@ $wp2 = fopen("../email/email_dropship_po_products.txt", 'r');
+@ $wp3 = fopen("../email/email_dropship_po_footer.txt", 'r');
 /*
 function zen_get_products_manufacturers_name($product_id) {
 global $db;
@@ -472,7 +472,7 @@ echo "<input type='checkbox' name='partialship' value='1' CHECKED />";
 else
 echo "<input type='checkbox' name='partialship' value='1' />";
  ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php } ?>
-<input type="image" src="includes/languages/english/images/buttons/button_send.gif" name='postonc' value='yes' ONCLICK="javascript:document.pos.submit();">
+<input class="normal_button button" type="button" name='postonc' value="<?php echo IMAGE_SEND; ?>" ONCLICK="javascript:document.pos.submit();">
 <?php if ($POST[step] == 5)
          echo "</form>";  ?>
 </center>

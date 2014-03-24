@@ -20,7 +20,7 @@
 //  $Id: po.php 277 2004-09-10 23:03:52Z wilt $
 //
 define('BOX_CUSTOMERS_SEND_POS', 'POs - Send/Resend');
-define('BOX_CUSTOMERS_SEND_POS_NC', 'POs - Send for Unknown Customer');
+//define('BOX_CUSTOMERS_SEND_POS_NC', 'POs - Send for Unknown Customer');
 define('BOX_CUSTOMERS_CONFIRM_TRACKING', 'POs - Enter tracking #s');
 define('BOX_TOOLS_EDIT_SUBCONTRACTORS', 'PO Edit subcontractors');
 define('BOX_TOOLS_SET_SUBCONTRACTORS', 'PO Assign to products');
