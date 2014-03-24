@@ -1,0 +1,64 @@
+.naglowki {
+FONT-WEIGHT: bold; 
+FONT-SIZE: 12px; 
+MARGIN: 0px; 
+WORD-SPACING: 0px; 
+COLOR: black; 
+TEXT-INDENT: 0px; 
+FONT-FAMILY: verdana, tahoma, arial, sans-sherif;
+}
+
+
+.tekst {
+FONT-WEIGHT: normal;
+FONT-SIZE: 12px; 
+MARGIN: 0px; 
+WORD-SPACING: 0px; 
+COLOR: black; 
+TEXT-INDENT: 0px; 
+FONT-FAMILY: verdana, tahoma, arial, sans-sherif;
+}
+
+.td {
+border:1px;
+border-color:black; 
+border-bottom-style:solid;  
+border-left-style:solid;
+		}
+		
+.td_zakonczenie {
+border:1px; 
+border-color:black; 
+border-bottom-style:solid;  
+border-left-style:solid; 
+border-right-style:solid;
+		}
+		
+.td_naglowek {
+border:1px; 
+border-color:black; 
+border-top-style:solid; 
+border-left-style:solid; 
+border-bottom-style:solid; 
+		}		
+		
+.td_naglowek_zak {
+border:1px; 
+border-color:black; 
+border-top-style:solid; 
+border-left-style:solid; 
+border-right-style:solid;
+border-bottom-style:solid; 
+		}			
+.sub{
+BORDER-TOP-COLOR: #000000; 
+BORDER-LEFT-COLOR: #000000; 
+BORDER-RIGHT-COLOR: #000000; 
+BORDER-BOTTOM-COLOR: #000000; 
+BORDER-TOP-WIDTH: 1px; 
+BORDER-LEFT-WIDTH: 1px; 
+FONT-SIZE: 11px; 
+BORDER-BOTTOM-WIDTH: 1px; 
+FONT-FAMILY: arial,tahoma, verdana, sans-sherif; 
+BORDER-RIGHT-WIDTH: 1px ;
+}		

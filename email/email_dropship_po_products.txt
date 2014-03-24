@@ -1,0 +1,2 @@
+Product Name: {manufacturers_name} - {products_name}
+Model: {products_model} {products_attributes}Qty: {products_quantity}

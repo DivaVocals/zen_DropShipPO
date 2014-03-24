@@ -1,0 +1,10 @@
+
+SHIPPING METHOD: {shipping_method}
+
+Please email us with tracking information when this order ships.
+
+If you have been granted access to our store and would prefer to enter tracking information for this order
+directly, please visit:
+{tracking_link}
+
+Thank you very much!

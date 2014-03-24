@@ -1,0 +1,16 @@
+TO: {full_name}, {street}, {city}, {state} {zip} ({telephone})
+
+Please ship the following dropship order.
+{po_comments}
+** Please affix a copy of the .PDF packing slip to the box.
+** It is attached to this email.
+
+PO #{po_number} (Purchase Date: {date_purchased})
+
+SHIPPING ADDRESS
+----------------
+{delivery_name}
+{delivery_adress}
+
+PRODUCTS ORDERED
+----------------
