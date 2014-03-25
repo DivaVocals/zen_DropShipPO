@@ -153,34 +153,34 @@ $disp_order = "subcontractors_id ASC";
 
 ?><tr><td class="pageHeading" colspan="2"><br><?php  echo HEADING_TITLE_EDIT_SUBCONTRACTORS; ?><br><br></td></tr>
            <tr>  <td valign="top" width='80%'>
-		   <table border="0" width='100%' cellspacing="0" cellpadding="0">
+		   <table width="100%" cellspacing="0" cellpadding="5" border="0">
               <tr class="dataTableHeadingRow">
-                <td width='3%' class="dataTableHeadingContent" align="center" valign="top">
+                <td width='3%' class="dataTableHeadingContent" align="left" valign="top">
                   <?php  echo ID; ?>
                 </td>
-                <td width='14%' class="dataTableHeadingContent" align="center">
+                <td width='14%' class="dataTableHeadingContent" align="left">
                   <?php echo TABLE_HEADING_SHORTNAME;  ?><br>
                   <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=firstname'); ?>"><?php echo ($_GET['list_order']=='firstname' ? '<span class="SortOrderHeader">Asc</span>' : '<span class="SortOrderHeaderLink">Asc</b>'); ?></a>&nbsp;
                   <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=firstnamedesc'); ?>"><?php echo ($_GET['list_order']=='firstnamedesc' ? '<span class="SortOrderHeader">Desc</span>' : '<span class="SortOrderHeaderLink">Desc</b>'); ?></a>
                 </td>
-                <td width='14%' class="dataTableHeadingContent" align="center">
+                <td width='14%' class="dataTableHeadingContent" align="left">
                   <?php echo TABLE_HEADING_FULLNAME; ?><br>
 				  <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=lastname'); ?>"><?php echo ($_GET['list_order']=='lastname' ? '<span class="SortOrderHeader">Asc</span>' : '<span class="SortOrderHeaderLink">Asc</b>'); ?></a>&nbsp;
                   <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=lastnamedesc'); ?>"><?php echo ($_GET['list_order']=='lastnamedesc' ? '<span class="SortOrderHeader">Desc</span>' : '<span class="SortOrderHeaderLink">Desc</b>'); ?></a>
                 </td>
-               	<td width='14%' class="dataTableHeadingContent" align="center">
+               	<td width='14%' class="dataTableHeadingContent" align="left">
                   <?php echo TABLE_HEADING_EMAIL; ?><br>
 				  <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=email'); ?>"><?php echo ($_GET['list_order']=='email' ? '<span class="SortOrderHeader">Asc</span>' : '<span class="SortOrderHeaderLink">Asc</b>'); ?></a>&nbsp;
                   <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=emaildesc'); ?>"><?php echo ($_GET['list_order']=='emaildesc' ? '<span class="SortOrderHeader">Desc</span>' : '<span class="SortOrderHeaderLink">Desc</b>'); ?></a>
                 </td>
 
-                <td width='14%' class="dataTableHeadingContent" align="center">
+                <td width='14%' class="dataTableHeadingContent" align="left">
                   <?php echo TABLE_HEADING_TELEPHONE; ?><br>
 				  <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=telephone'); ?>"><?php echo ($_GET['list_order']=='telephone' ? '<span class="SortOrderHeader">Asc</span>' : '<span class="SortOrderHeaderLink">Asc</b>'); ?></a>&nbsp;
                   <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=telephonedesc'); ?>"><?php echo ($_GET['list_order']=='telephonedesc' ? '<span class="SortOrderHeader">Desc</span>' : '<span class="SortOrderHeaderLink">Desc</b>'); ?></a>
                 </td>
 
-                <td width='14%' class="dataTableHeadingContent" align="center">
+                <td width='14%' class="dataTableHeadingContent" align="left">
                   <?php echo TABLE_CONTACT_PERSON; ?><br>
 				  <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=person'); ?>"><?php echo ($_GET['list_order']=='person' ? '<span class="SortOrderHeader">Asc</span>' : '<span class="SortOrderHeaderLink">Asc</b>'); ?></a>&nbsp;
                   <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=persondesc'); ?>"><?php echo ($_GET['list_order']=='persondesc' ? '<span class="SortOrderHeader">Desc</span>' : '<span class="SortOrderHeaderLink">Desc</b>'); ?></a>
@@ -222,7 +222,7 @@ $disp_order = "subcontractors_id ASC";
 						for($i=0; $i<count($row); $i++)
 						{
 
-						echo "<td align='center'>$row[$i]</td>";
+						echo "<td align='left'>$row[$i]</td>";
 						}
 						if($k=='0')
 						{
@@ -251,7 +251,7 @@ $disp_order = "subcontractors_id ASC";
 		</td>
 		<td valign="top" >
 
-		<table border="0" width='100%' cellspacing="0" cellpadding="2" align="center">
+		<table border="0" width='100%' cellspacing="0" cellpadding="2" align="left">
 		<tr>
 		<?php
 $query2=mysql_query("SELECT * FROM ".TABLE_SUBCONTRACTORS." WHERE subcontractors_id='$cid'")
@@ -304,9 +304,9 @@ $row2=mysql_fetch_array($query2, MYSQL_NUM);
 		</tr><input type="hidden" name="pole"><input type='hidden' name="key" value="<?php echo $row2[0]; ?>">
 <tr>
 <td colspan="2" class="infoBoxContent">
-<input type="image" src="includes/languages/english/images/buttons/button_insert.gif" name='insert' ONCLICK="javascript: document.form1.pole.value=1;document.form1.submit();">
-<input type="image" src="includes/languages/english/images/buttons/button_save.gif"  ONCLICK="javascript:document.form1.pole.value=0;document.form1.submit();">
-<a href="edit_subcontrac.php?what=delete&did=<?php echo $row2[0]; ?>"><img src="includes/languages/english/images/buttons/button_delete.gif" border="0" alt="Delete" title=" Delete "></a>
+<input class="normal_button button" type="button" value="<?php echo IMAGE_INSERT; ?>" name='insert' ONCLICK="javascript: document.form1.pole.value=1;document.form1.submit();">
+<input class="normal_button button" type="button" value="<?php echo IMAGE_SAVE; ?>" name='insert' ONCLICK="javascript:document.form1.pole.value=0;document.form1.submit();">
+<a href="edit_subcontrac.php?what=delete&did=<?php echo $row2[0]; ?>"><input class="normal_button button" type="button" value="<?php echo IMAGE_DELETE; ?>"></a>
 </form>
 
 </td>

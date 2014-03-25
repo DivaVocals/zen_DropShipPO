@@ -334,10 +334,10 @@ if(error($y, $x)==1 AND save($y, $x)==1)
 					<td width=80% valign='top'>
 						<table border="0" cellspacing="0" cellpadding="3">
 						<tr>
-							<td width='5%' align='center' class='td_naglowek'><font class='naglowki'><?php echo TRACKING_PO_NUMBER; ?></font></td>
-							<td width='15%' align='center' class='td_naglowek'><font class='naglowki'><?php echo TRACKING_PO_DATE; ?></font></td>
-							<td width='20%' align='center' class='td_naglowek'><font class='naglowki'><?php echo TRACKING_CUSTOMER_DATA;  ?></font></td>
-							<td width='20%' align='center' class='td_naglowek_zak'><font class='naglowki'>Add Tracking ID</font></td>
+							<td width='5%' align='left' class='td_naglowek'><font class='naglowki'><?php echo TRACKING_PO_NUMBER; ?></font></td>
+							<td width='15%' align='left' class='td_naglowek'><font class='naglowki'><?php echo TRACKING_PO_DATE; ?></font></td>
+							<td width='20%' align='left' class='td_naglowek'><font class='naglowki'><?php echo TRACKING_CUSTOMER_DATA;  ?></font></td>
+							<td width='20%' align='left' class='td_naglowek_zak'><font class='naglowki'>Add Tracking ID</font></td>
 
 						</tr>
 				<?php
@@ -364,9 +364,9 @@ else
 $ordersaddress = $row3[0]."<br />".$orderaddresscompany.$row3[2].$orderaddresssuburb."<br />".$row3[3].", ".$row3[5]." ".$row3[4]."<br />".$row3[6];
 				?>
 				<tr>
-							<td width='5%' class='td'><font class='tekst'><?php echo $row2[3]."-".$row2[0]; ?></font></td>
-							<td width='10%' class='td'><font class='tekst'><?php echo $row2[4]; ?></font></td>
-							<td width='20%' class='td'><font class='tekst'><?php echo $ordersaddress; ?></font></td>
+							<td width='5%' class='td' valign="top" ><font class='tekst'><?php echo $row2[3]."-".$row2[0]; ?></font></td>
+							<td width='10%' class='td' valign="top" ><font class='tekst'><?php echo $row2[4]; ?></font></td>
+							<td width='20%' class='td' valign="top" ><font class='tekst'><?php echo $ordersaddress; ?></font></td>
 					<td class='td_zakonczenie'>
 					<table border="0" cellspacing="0" cellpadding="3"><form name='save1' method='POST' action='confirm_track_sub.php'>
 
@@ -404,7 +404,7 @@ $ordersaddress = $row3[0]."<br />".$orderaddresscompany.$row3[2].$orderaddresssu
 						</tr>
 </table><br><table border="0" cellspacing="0" cellpadding="3">
 <tr><td class='td_naglowek'><font class='naglowki'><?php echo SEND_TRACKING_YES_NO; ?></font></td>
-<td align="center" class='td_naglowek_zak'><font class='naglowki'><?php  echo TRACKING_PRODUCT_NAME; ?></font></td></tr>
+<td align="left" valign="top" class='td_naglowek_zak'><font class='naglowki'><?php  echo TRACKING_PRODUCT_NAME; ?></font></td></tr>
 
 				<?php
 				$query5=mysql_query("SELECT orders_id, products_name, orders_products_id
@@ -428,7 +428,7 @@ $ordersaddress = $row3[0]."<br />".$orderaddresscompany.$row3[2].$orderaddresssu
 
 
 					?>
-					<tr><td align="center" class='td'><input type='checkbox' name='<?php echo "orders_products_id_". $i ?>' value='<?php echo $row5[2]; ?>' CHECKED></td>
+					<tr><td align="center" class='td' valign='top' ><input type='checkbox' name='<?php echo "orders_products_id_". $i ?>' value='<?php echo $row5[2]; ?>' CHECKED></td>
 					<td class='td_zakonczenie'><font class='tekst'><?php  echo $row5[1]."<br>".$attributes; ?></font></td></tr>
 					<?php
 					echo "<input type='hidden' name='orders_id_$i' value='$row5[0]'>";
@@ -436,7 +436,7 @@ $ordersaddress = $row3[0]."<br />".$orderaddresscompany.$row3[2].$orderaddresssu
 					  }
 					  echo "<input type='hidden' name='ile' value='$i'>";
 					?>
-					<tr><td COLSPAN="2" align='center'><input type='hidden' name='save' value='save'><input type="image" src="includes/languages/english/images/buttons/button_save.gif"  ONCLICK="javascript:document.save1.submit();"></td></tr>
+					<tr><td COLSPAN="2" align='center'><input class="normal_button button" type="button" value="<?php echo IMAGE_SAVE; ?>" name='insert' ONCLICK="javascript:document.set.submit();"></td></tr>
 </form>
 </table>
 

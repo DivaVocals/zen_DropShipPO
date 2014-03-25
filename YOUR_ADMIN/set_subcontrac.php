@@ -118,24 +118,24 @@ or die("Nie mozna sie polaczyc z baza danych5");
 
 ?><tr><td class="pageHeading" colspan="2"><br><?php  echo TABLE_SET_SUBC_HEADING; ?><br><br></td></tr>
            <tr>  <td valign="top" width='80%'>
-		   <table border="0" width='100%' cellspacing="0" cellpadding="0">
+		   <table border="0" width='100%' cellspacing="2" cellpadding="0">
               <tr class="dataTableHeadingRow">
-                <td width='5%' class="dataTableHeadingContent" align="center" valign="top">
+                <td width='5%' class="dataTableHeadingContent" align="left" valign="top">
                   <?php  echo ID; ?>
                 </td>
-                <td width='20%' class="dataTableHeadingContent" align="center">
+                <td width='20%' class="dataTableHeadingContent" align="left">
                   <?php echo TABLE_SET_SUBC_MODEL;  ?><br>
                   <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=modelname'); ?>"><?php echo ($_GET['list_order']=='modelname' ? '<span class="SortOrderHeader">Asc</span>' : '<span class="SortOrderHeaderLink">Asc</b>'); ?></a>&nbsp;
                   <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=modelnamedesc'); ?>"><?php echo ($_GET['list_order']=='modelnamedesc' ? '<span class="SortOrderHeader">Desc</span>' : '<span class="SortOrderHeaderLink">Desc</b>'); ?></a>
                 </td>
-				<td width='20%' class="dataTableHeadingContent" align="center" valign="top">
+				<td width='20%' class="dataTableHeadingContent" align="left" valign="top">
                   <?php echo TABLE_SET_SUBC_PRODUCTS_NAME; ?><br>
 				</td>
-                <td width='20%' class="dataTableHeadingContent"  align='center' valign="top">
+                <td width='20%' class="dataTableHeadingContent"  align='left' valign="top">
                   <?php echo TABLE_SET_SUBC_MANUFACTURER; ?><br>
 				                  </td>
 				
-               	<td width='20%' class="dataTableHeadingContent" align="center" valign='top'>
+               	<td width='20%' class="dataTableHeadingContent" align="left" valign='top'>
                   <?php echo TABLE_SET_SUBC_DEFAULT; ?><br>
 				 </td>
 					
@@ -223,7 +223,7 @@ $i=0;
 					if($i%2==1)
 			{
 			echo "<tr class='dataTableRow'>".
-				"<td align='center'>$row2[0]</td><td align='center'>$row2[1]</td><td align='center'>$row5[0]</td><td  align='center'>$row3[1]</td><td align='center'>";
+				"<td align='left'>$row2[0]</td><td align='left'>$row2[1]</td><td align='left'>$row5[0]</td><td  align='left'>$row3[1]</td><td align='left'>";
 				 sub($row2[0]);
 			echo	"</td>".
 				"</tr><input type='hidden' name='$i' value='$row2[0]'>"	;
@@ -232,7 +232,7 @@ $i=0;
 					if($i%2==0)
 			{
 			echo "<tr class='dataTableRowSelected'>".
-				"<td align='center'>$row2[0]</td><td align='center'>$row2[1]</td><td align='center'>$row5[0]</td><td  align='center'>$row3[1]</td><td align='center'>";
+				"<td align='left'>$row2[0]</td><td align='left'>$row2[1]</td><td align='left'>$row5[0]</td><td  align='left'>$row3[1]</td><td align='left'>";
 				
 			sub($row2[0]);
 			echo	"</td>".
@@ -255,8 +255,8 @@ $i=0;
 			 pasek($l_odp,$l_odp_nastronie,$l_odp_napasku,$skrypt,$a);
 					?>
 					</form>
-					 <tr><td colspan='5'align='center'><br></td></tr>
- <tr><td colspan='6'align='center'><input type="image" src="includes/languages/english/images/buttons/button_save.gif" name='insert' ONCLICK="javascript:document.set.submit();"></td></tr>
+					 <tr><td colspan='5'align='left'><br></td></tr>
+ <tr><td colspan='6'align='center'><input class="normal_button button" type="button" value="<?php echo IMAGE_SAVE; ?>" name='insert' ONCLICK="javascript:document.set.submit();"></td></tr>
 </td>
 </tr>
 			
