@@ -1,0 +1,25 @@
+.cssButton, .cssButton:hover, input.cssButton, .button, input.button, input[type=button]  { 
+	background-color:white; 
+	border:1px solid #003366; 
+	color:#404040; 
+	border-radius:30px; 
+	-moz-border-radius:30px;
+	-webkit-border-radius:30px;
+	display:inline-block; 
+	font-family:Verdana, Helvetica, Tahoma, Arial, sans-serif; 
+	font-size:11px; 
+	font-weight:bold; 
+	margin: 0; 
+	padding:3px 8px; 
+	text-decoration:none;
+	}
+span.cssButton:hover { 
+	background-color: #dcdcdc; /* Grey Hover Color */ 
+	}
+input.cssButton:hover, .button:hover, input.button:hover, input[type=button]:hover { 
+	/*background-color:#599659;*/ /* Green Hover Color */ 
+	background-color:#dcdcdc; /* Grey Hover Color */ 
+	border: 1px solid #003d00; 
+	/*color: white;*/
+	cursor: pointer;
+	}
