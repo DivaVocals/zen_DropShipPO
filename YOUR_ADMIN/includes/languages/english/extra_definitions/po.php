@@ -19,9 +19,10 @@
 // +----------------------------------------------------------------------+
 //  $Id: po.php 277 2004-09-10 23:03:52Z wilt $
 //
-define('BOX_CUSTOMERS_SEND_POS', 'POs - Send/Resend');
-//define('BOX_CUSTOMERS_SEND_POS_NC', 'POs - Send for Unknown Customer');
+define('BOX_CUSTOMERS_SEND_POS', 'Send/Resend POs');
+//define('BOX_CUSTOMERS_SEND_POS_NC', 'POs - Send for Unknown Customer'); //This is purposely commented out. This existed in previous versions of the module. This line can be left commented out or deleted in it's entirety.
 define('BOX_CUSTOMERS_CONFIRM_TRACKING', 'POs - Enter tracking #s');
-define('BOX_TOOLS_EDIT_SUBCONTRACTORS', 'PO Edit subcontractors');
-define('BOX_TOOLS_SET_SUBCONTRACTORS', 'PO Assign to products');
+//define('BOX_TOOLS_EDIT_SUBCONTRACTORS', 'PO Edit subcontractors'); //This is purposely commented out. This existed in previous versions of the module. This line can be left commented out or deleted in it's entirety.
+//define('BOX_TOOLS_SET_SUBCONTRACTORS', 'PO Assign to products'); //This is purposely commented out. This existed in previous versions of the module. This line can be left commented out or deleted in it's entirety.
+define('BOX_DROPSHIP_SET_SUBCONTRACTORS', 'Assign Products to Origin Locations');
 ?>

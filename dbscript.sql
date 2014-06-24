@@ -1,21 +1,23 @@
 /* For New Install copy lines 2 - 84 */
-CREATE TABLE IF NOT EXISTS `subcontractors` (
-  `subcontractors_id` int(10) unsigned NOT NULL auto_increment,
-  `short_name` varchar(20) NOT NULL default '',
-  `full_name` varchar(100) NOT NULL default '',
-  `street1` varchar(100) NOT NULL default '',
-  `city` varchar(255) NOT NULL default '',
-  `state` varchar(255) NOT NULL default '',
-  `zip` varchar(10) NOT NULL default '',
-  `email_address` varchar(100) NOT NULL default '',
-  `telephone` varchar(32) NOT NULL default '',
-  `contact_person` varchar(100) NOT NULL default '',
-  PRIMARY KEY  (`subcontractors_id`)
-) COMMENT='subcontractors' AUTO_INCREMENT=0;
+CREATE TABLE IF NOT EXISTS `subcontractors_shipping` (
+  `subcontractors_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `alias` varchar(30) NOT NULL DEFAULT '',
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `street1` varchar(100) NOT NULL DEFAULT '',
+  `city` varchar(255) NOT NULL DEFAULT '',
+  `state` varchar(255) NOT NULL DEFAULT '',
+  `zip` varchar(10) NOT NULL DEFAULT '',
+  `country` int(11) NOT NULL DEFAULT '223',
+  `email_address` varchar(100) NOT NULL DEFAULT '',
+  `telephone` varchar(32) NOT NULL DEFAULT '',
+  `contact_person` varchar(100) NOT NULL DEFAULT '',
+  `pickup_restrictions` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`subcontractors_id`)
+);
 
-INSERT INTO subcontractors VALUES (0, 'ownstock', 'Own stock', 'Street','City','State','ZIP','email@email.com','telephone','contact name');
+INSERT INTO subcontractors_shipping VALUES (0, 'ownstock', 'Own stock', 'Street','City','State','ZIP','email@email.com','telephone','contact name');
 
-UPDATE subcontractors SET subcontractors_id=0 where short_name='ownstock';
+UPDATE subcontractors_shipping SET subcontractors_id=0 where short_name='ownstock';
 
 ALTER TABLE `orders_products`
 ADD `po_sent` char(1) NOT NULL default '0',

@@ -405,7 +405,7 @@ $querycp=mysql_query("SELECT orders_products_id FROM ".TABLE_ORDERS_PRODUCTS."  
 }
 			//wybieranie adresu pczty email poddostawcy
 			$dlaemaila= ($tmpt[0][0]!='0') ? $tmpt[0][0] : 0;
-			$query22=mysql_query("SELECT * FROM ".TABLE_SUBCONTRACTORS." WHERE subcontractors_id='$dlaemaila'")
+			$query22=mysql_query("SELECT * FROM ".TABLE_SUBCONTRACTORS_SHIPPING." WHERE subcontractors_id='$dlaemaila'")
 			or die("Failed to connect database: 1");
 			$subcontractor=mysql_fetch_assoc($query22);
 			$adresdo=$subcontractor['email_address'];
@@ -443,8 +443,8 @@ $querycp=mysql_query("SELECT orders_products_id FROM ".TABLE_ORDERS_PRODUCTS."  
                         $tematk=PO_SUBJECT;
 			$tematk=str_replace("{po_number}",$wielowymiar[$i][4]."-".$kod,$tematk);
 			$tematk=str_replace("{contact_person}",$subcontractor['contact_person'],$tematk);
-			$tematk=str_replace("{full_name}",$subcontractor['full_name'],$tematk);
-		        $tematk=str_replace("{short_name}",$subcontractor['short_name'],$tematk);
+			$tematk=str_replace("{name}",$subcontractor['name'],$tematk);
+		        $tematk=str_replace("{alias}",$subcontractor['alias'],$tematk);
                         $tematk = str_replace("{order_number}",$wielowymiar[$i][4],$tematk);
 			$tracking_link_1='<a href="'.HTTP_SERVER.DIR_WS_ADMIN.'confirm_track_sub.php?x='.$dlaemaila.'&y='.$kod.'">'.HTTP_SERVER.DIR_WS_ADMIN.'confirm_track_sub.php?x='.$dlaemaila.'&y='.$kod.'</a>';
 
@@ -455,8 +455,8 @@ $querycp=mysql_query("SELECT orders_products_id FROM ".TABLE_ORDERS_PRODUCTS."  
 
 		  $newzawartosc=$newzawartosc.$tracking_link_good;
 		  $newzawartosc = str_replace("{contact_person}",$subcontractor['contact_person'],$newzawartosc);
-		  $newzawartosc = str_replace("{full_name}",$subcontractor['full_name'],$newzawartosc);
-		  $newzawartosc = str_replace("{short_name}",$subcontractor['short_name'],$newzawartosc);
+		  $newzawartosc = str_replace("{name}",$subcontractor['name'],$newzawartosc);
+		  $newzawartosc = str_replace("{alias}",$subcontractor['alias'],$newzawartosc);
 		  $newzawartosc = str_replace("{subcontractors_id}",$subcontractor['subcontractors_id'],$newzawartosc);
 		  $newzawartosc = str_replace("{street}",$subcontractor['street1'],$newzawartosc);
 		  $newzawartosc = str_replace("{city}",$subcontractor['city'],$newzawartosc);
@@ -541,10 +541,10 @@ if($_POST[reviewthensend] != 'yes') { ?>
 			{
 		   function sub2()
 			{
-			$query2=mysql_query("SELECT subcontractors_id,short_name FROM ".TABLE_SUBCONTRACTORS." ORDER BY short_name")
+			$query2=mysql_query("SELECT subcontractors_id,alias FROM ".TABLE_SUBCONTRACTORS_SHIPPING." ORDER BY alias")
 			or die('Failed to connect database: ');
 
-			/*$query99=mysql_query("SELECT  subcontractors_id,short_name FROM subcontractors ORDER BY short_name")
+			/*$query99=mysql_query("SELECT  subcontractors_id,alias FROM subcontractors ORDER BY alias")
 			or die('Failed to connect database: ');*/
 
 			echo "<select name='sub11'>".
@@ -682,7 +682,7 @@ if($_POST[reviewthensend] != 'yes') { ?>
 			function sub($name, $i)
 			{
 
-			$query2=mysql_query("SELECT  subcontractors_id,short_name FROM ".TABLE_SUBCONTRACTORS." ORDER BY short_name")
+			$query2=mysql_query("SELECT  subcontractors_id,alias FROM ".TABLE_SUBCONTRACTORS_SHIPPING." ORDER BY alias")
 			or die('Failed to connect database: ');
 			$query232=mysql_query("SELECT products_id, default_subcontractor FROM ".TABLE_PRODUCTS." WHERE products_id='$name'")
 			or die ("Nie mzona sie polaczcy z baza danych");
@@ -730,7 +730,7 @@ if($_POST[reviewthensend] != 'yes') { ?>
 			$row100[0]="Own stock";
 			}else
 			{ */
-			$query100=mysql_query("SELECT short_name FROM ".TABLE_SUBCONTRACTORS." WHERE subcontractors_id='$row2[5]'")
+			$query100=mysql_query("SELECT alias FROM ".TABLE_SUBCONTRACTORS_SHIPPING." WHERE subcontractors_id='$row2[5]'")
 			or die('Failed to connect database: ');
 			$row100=mysql_fetch_array($query100, MYSQL_NUM);
 			/* } */
@@ -847,7 +847,7 @@ echo "<tr class='dataTableRow'>".
 			function sub($name, $i)
 			{
 
-			$query2=mysql_query("SELECT  subcontractors_id,short_name FROM ".TABLE_SUBCONTRACTORS." ORDER BY short_name")
+			$query2=mysql_query("SELECT  subcontractors_id,alias FROM ".TABLE_SUBCONTRACTORS_SHIPPING." ORDER BY alias")
 			or die('Failed to connect database: ');
 			$query232=mysql_query("SELECT products_id, default_subcontractor FROM ".TABLE_PRODUCTS." WHERE products_id='$name'")
 			or die ("Nie mzona sie polaczcy z baza danych");

@@ -35,5 +35,3 @@ define('REFRESH_WARNING', 'Warning: Never refresh this page.  Doing so may accid
 define('COMMENTS_WARNING', 'Warning: The comments you add will appear on <u>every</u> purchase order or packing list you send at a time.');
 define('REVIEW_EMAIL_SEND_EMAIL_TO', 'Send Email To');
 define('REVIEW_EMAIL_EMAIL_TITLE', 'Email Title');
-
-?>

@@ -156,7 +156,7 @@ or die("Nie mozna sie polaczyc z baza danych5");
 			/*if($row33[0]==0)
 			{
 			echo "<option value='own_stock'>Own stock</option>";
-			$query2=mysql_query("SELECT  subcontractors_id,short_name FROM ".TABLE_SUBCONTRACTORS." ORDER BY short_name")
+			$query2=mysql_query("SELECT  subcontractors_id,alias FROM ".TABLE_SUBCONTRACTORS_SHIPPING." ORDER BY alias")
 			or die('Nie mozna sie polaczyc z baza danych');
 			while($row22=mysql_fetch_array($query2, MYSQL_NUM))
 			{
@@ -167,7 +167,7 @@ or die("Nie mozna sie polaczyc z baza danych5");
 			else
 			{ */
 			
-			$query2=mysql_query("SELECT  subcontractors_id,short_name FROM ".TABLE_SUBCONTRACTORS." ORDER BY short_name")
+			$query2=mysql_query("SELECT  subcontractors_id,alias FROM ".TABLE_SUBCONTRACTORS_SHIPPING." ORDER BY alias")
 			or die('Nie mozna sie polaczyc z baza danych');
 			while($row22=mysql_fetch_array($query2, MYSQL_NUM))
 			{

@@ -117,7 +117,7 @@ $wyjscie=array_values($temp);
 				or die("Nie mozna sie polaczcy z baza danych");
 				$row1=mysql_fetch_array($query1, MYSQL_NUM);
 
-			$subcontractor_query = mysql_query("SELECT full_name FROM ".TABLE_SUBCONTRACTORS." WHERE subcontractors_id = '$row[3]'");
+			$subcontractor_query = mysql_query("SELECT name FROM ".TABLE_SUBCONTRACTORS_SHIPPING." WHERE subcontractors_id = '$row[3]'");
 			$subcontractor = mysql_fetch_assoc($subcontractor_query);
 				if($h%2==1)
 				     echo "<tr class='dataTableRowSelected'>";
@@ -131,7 +131,7 @@ $wyjscie=array_values($temp);
                   <?php  echo $row[2]; ?>
                 </td>
   <td align="center" valign="center">
-                  <?php  echo $subcontractor[full_name]; ?>
+                  <?php  echo $subcontractor[name]; ?>
                 </td>
 				<td align="center" valign="top">
                   <?php

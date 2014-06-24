@@ -20,7 +20,7 @@
   define('FILENAME_SUBCONTRACTORS', 'edit_subcontrac');
   define('FILENAME_SET_SUBCONTRACTORS', 'set_subcontrac');
   define('FILENAME_SEND_POS', 'send_pos');
-//  define('FILENAME_SEND_POS_NC', 'send_pos_nc');  
+//define('FILENAME_SEND_POS_NC', 'send_pos_nc');  
   define('FILENAME_CONFIRM_TRACKING', 'confirm_track');
   define('FILENAME_CONFIRM_TRACKING_SUB', 'confirm_track_sub');
   define('BOX_CONFIGURATION_DROPSHIP', 'DropShip Purchase Orders');//for 1.5
