@@ -10,7 +10,7 @@ PO #{po_number} (Purchase Date: {date_purchased})
 SHIPPING ADDRESS
 ----------------
 {delivery_name}
-{delivery_adress}
+{delivery_address}
 
 PRODUCTS ORDERED
 ----------------

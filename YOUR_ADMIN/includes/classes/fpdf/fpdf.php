@@ -1168,7 +1168,7 @@ function _putfonts()
 	$mqr=get_magic_quotes_runtime();
 		//set_magic_quotes_runtime(0);
 		//ini_set('magic_quotes_runtime', 0);
-		get_magic_quotes_runtime(0);
+		get_magic_quotes_runtime();
 	foreach($this->FontFiles as $file=>$info)
 	{
 		//Font file embedding
@@ -1208,7 +1208,7 @@ function _putfonts()
 	}
 		//set_magic_quotes_runtime($mqr);
 		//ini_set('magic_quotes_runtime', $mqr);
-		get_magic_quotes_runtime($mqr);
+		get_magic_quotes_runtime();
 	foreach($this->fonts as $k=>$font)
 	{
 		//Font objects

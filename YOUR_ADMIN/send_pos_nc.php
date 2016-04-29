@@ -11,4 +11,4 @@
  * the process of copying files from the distribution to a Zen Cart
  * installation.
  */
- ?>
+?>
