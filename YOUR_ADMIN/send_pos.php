@@ -466,14 +466,18 @@ function zen_get_products_manufacturers_name($product_id) {
                 $tracking_link_good = '';
                 $date = date('Y-m-d');
 // unlink($pdffilename); 
-                if (!($_POST[reviewthensend] == 'yes')) {
+
+// FIXME - it would be ideal if the db were not updated prior to the 
+// email actually being sent, but this requires a few more changes - 
+// will do this later.
+                // if (!($_POST[reviewthensend] == 'yes')) {
                    for ($m = 0; $m < count($tmpt); $m++) {
                        $tm = $tmpt[$m][2];
                        $tm2 = $tmpt[$m][0];
    
                        $db->Execute("UPDATE " . TABLE_ORDERS_PRODUCTS . " SET po_sent='1', item_shipped=0, po_number='$kod', po_sent_to_subcontractor='$tm2', po_date='$date' WHERE  orders_products_id='$tm' LIMIT 1");
                    }
-                }
+                // }
             }
         }
     }
