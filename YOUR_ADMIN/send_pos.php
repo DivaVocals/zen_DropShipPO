@@ -193,7 +193,7 @@ function zen_get_products_manufacturers_name($product_id) {
                 else
                     $address = "";
                 if ($row4->fields['customers_company'] != '' && $row4->fields['customers_company'] != NULL)
-                    $address .= $row4->fields[6] . "\n" . $row4->fields['customers_company'] . "\n" . $row4->fields[7] . ", " . $row4->fields[9] . " " . $row4->fields[8] . "\n" . $row4->fields[10];
+                    $address .= $row4->fields['customers_street_address'] . "\n" . $row4->fields['customers_company'] . "\n" . $row4->fields['customers_city'] . ", " . $row4->fields['customers_state'] . " " . $row4->fields['customers_postcode'] . "\n" . $row4->fields['customers_country'];
                 else
                     $address .= $row4->fields['customers_street_address'] . "\n" . $row4->fields['customers_city'] . ", " . $row4->fields['customers_state'] . " " . $row4->fields['customers_postcode'] . "\n" . $row4->fields['customers_country'];
                 if ($row4->fields['delivery_company'] != '' && $row4->fields['delivery_company'] != NULL)
@@ -215,19 +215,19 @@ function zen_get_products_manufacturers_name($product_id) {
                 $price = $row4->fields['final_price'] . ' ' . $row4->fields['date_purchased'];
                 $zawartosc2 = array();
                 //podmiana tagow dla pliku header
-                $zawartosc2[$i] = str_replace("{customers_name}", $row4->fields[5], $zawartosc);
-                $zawartosc2[$i] = str_replace("{order_number}", $row4->fields[31], "$zawartosc2[$i]");
+                $zawartosc2[$i] = str_replace("{customers_name}", $row4->fields['customers_name'], $zawartosc);
+                $zawartosc2[$i] = str_replace("{order_number}", $row4->fields['orders_id'], "$zawartosc2[$i]");
                 $zawartosc2[$i] = str_replace("{customers_address}", $address, "$zawartosc2[$i]");
-                $zawartosc2[$i] = str_replace("{customers_phone}", $row4->fields[11], "$zawartosc2[$i]");
-                $zawartosc2[$i] = str_replace("{customers_email}", $row4->fields[12], "$zawartosc2[$i]");
-                $zawartosc2[$i] = str_replace("{delivery_name}", $row4->fields[13], "$zawartosc2[$i]");
+                $zawartosc2[$i] = str_replace("{customers_phone}", $row4->fields['customers_telephone'], "$zawartosc2[$i]");
+                $zawartosc2[$i] = str_replace("{customers_email}", $row4->fields['customers_email_address'], "$zawartosc2[$i]");
+                $zawartosc2[$i] = str_replace("{delivery_name}", $row4->fields['delivery_name'], "$zawartosc2[$i]");
                 $zawartosc2[$i] = str_replace("{po_comments}", $_POST[posubcomments], "$zawartosc2[$i]");
-                $oatmeal = $db->Execute("select comments from " . TABLE_ORDERS_STATUS_HISTORY . " WHERE orders_id = '" . zen_db_input($row4->fields[31]) . "' order by date_added");
+                $oatmeal = $db->Execute("select comments from " . TABLE_ORDERS_STATUS_HISTORY . " WHERE orders_id = '" . zen_db_input($row4->fields[orders_id]) . "' order by date_added");
                 $catmeow = nl2br(zen_db_output($oatmeal->fields['comments']));
                 $catmeow = strip_tags($catmeow);
                 $zawartosc2[$i] = str_replace("{customers_comments}", $catmeow, "$zawartosc2[$i]");
                 if ($row4->fields['delivery_company'] != '') {
-                    $zawartosc2[$i] = str_replace("{delivery_company}", $row4->fields[14], "$zawartosc2[$i]");
+                    $zawartosc2[$i] = str_replace("{delivery_company}", $row4->fields['delivery_company'], "$zawartosc2[$i]");
                 } else {
                     $zawartosc2[$i] = str_replace("{delivery_company}", '-', "$zawartosc2[$i]");
                 }
@@ -235,7 +235,7 @@ function zen_get_products_manufacturers_name($product_id) {
                 $zawartosc2[$i] = str_replace("{delivery_address}", $address_deliver, "$zawartosc2[$i]");
 
                 if ($row4->fields['billing_company'] != '') {
-                    $zawartosc2[$i] = str_replace("{billing_company}", $row4->fields[21], "$zawartosc2[$i]");
+                    $zawartosc2[$i] = str_replace("{billing_company}", $row4->fields['billing_company'], "$zawartosc2[$i]");
                 } else {
                     $zawartosc2[$i] = str_replace("{billing_company}", '-', "$zawartosc2[$i]");
                 }
