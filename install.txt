@@ -1,0 +1,26 @@
+Installation Instructions
+
+*** Start by making a backup of your files and database.
+Don't skip this step, you fool! 
+
+First time Install: 
+1. Run install.sql in Admin->Tools->Install SQL Patches 
+
+2. Copy all files in YOUR_ADMIN and email to your cart 
+
+Upgrading: 
+1. Run upgrade.sql in Admin->Tools->Install SQL Patches 
+
+2. Run migrate.sql in  Admin->Tools->Install SQL Patches 
+
+3. Remove these files: 
+YOUR_ADMIN/includes/boxes/extra_boxes/send_po_customers_dhtml.php
+YOUR_ADMIN/includes/boxes/extra_boxes/send_po_extras_dhtml.php
+YOUR_ADMIN/includes/extra_datafiles/send_pos_nc_filenames.php
+YOUR_ADMIN/includes/languages/english/extra_definitions/send_pos_nc.php
+email/email_footer.txt
+email/email_header.txt
+email/email_products.txt
+
+3. Copy all files in YOUR_ADMIN and email to your cart 
+
