@@ -7,3 +7,5 @@ See: http://www.zen-cart.com/showthread.php?86503-Drop-Shipping-Purchase-Orders-
 
 Note: The readme.html is out of date but the install instructions are correct. 
 
+The support thread for this mod is at 
+https://www.zen-cart.com/showthread.php?86503-Drop-Shipping-Purchase-Orders-Module-for-v1-3-8
