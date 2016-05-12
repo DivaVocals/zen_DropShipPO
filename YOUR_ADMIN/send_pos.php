@@ -516,7 +516,7 @@ function zen_get_products_manufacturers_name($product_id) {
                 echo '<form name="wyszukiwarka" action="send_pos.php" method="POST">
                    <input type="hidden" name="co" value="old">
                    <table border="0" width="100%" cellspacing="0" cellpadding="0">
-                                   <tr><td align="center" colspan="2">' . TABLE_DATA_FROM_DATES . ': <input type="text" size="10" name="data_od"> ' . TABLE_TO . ' <input type="text" size="10" name="data_do">
+                                   <tr><td align="center" colspan="2">' . TABLE_DATA_FROM_DATES . ': <input type="text" size="20" name="data_od"> ' . TABLE_TO . ' <input type="text" size="10" name="data_do">
                                 &nbsp;&nbsp;' . TABLE_PO_PREOVIOUS_NUMBER . ': <input type="text" size="10" name="po_number">&nbsp;&nbsp;
                                 ' . TABLE_ORDER_NUMBER . ': <input type="text" size="10" name="orders_num">&nbsp;&nbsp;
                                 ' . TABLE_SUBCONTRACTOR . ': ';
@@ -577,14 +577,14 @@ function zen_get_products_manufacturers_name($product_id) {
                 if (isset($_POST[co2]) AND $_POST[co2] == 'wyswietl') {
 
                     if ($_POST[data_od] != '') {
-                        $data_od = $_POST[data_od];
+                        $data_od = zen_db_prepare_input($_POST[data_od]);
                         $zmienna2 = "AND (p.po_date>='$data_od')";
                     } else {
                         $zmienna2 = '';
                     }
 
                     if ($_POST[data_do] != '') {
-                        $data_do = $_POST[data_do];
+                        $data_do = zen_db_prepare_input($_POST[data_do]);
                         $zmienna1 = "AND (p.po_date<='$data_do')";
                     } else {
                         $zmienna1 = '';
@@ -597,19 +597,19 @@ function zen_get_products_manufacturers_name($product_id) {
                     }
 
                     if ($_POST[po_number] != '') {
-                        $po_number = $_POST[po_number];
+                        $po_number = (int)$_POST[po_number];
                     } else {
                         $po_number = '%';
                     }
 
                     if ($_POST[orders_num] != '') {
-                        $orders_num = $_POST[orders_num];
+                        $orders_num = (int)$_POST[orders_num];
                     } else {
                         $orders_num = '%';
                     }
 
                     if ($_POST[sub11] != '') {
-                        $sub1 = $_POST[sub11];
+                        $sub1 = zen_db_prepare_input($_POST[sub11]);
                     } else {
                         $sub1 = '%';
                     }
@@ -630,16 +630,25 @@ function zen_get_products_manufacturers_name($product_id) {
                             if ($row232->fields['default_subcontractor'] == $row22->fields['subcontractors_id']) {
                                 echo "selected";
                             }
-                            echo ">" . $row22->fields['subcontractors_id'] . "</option>";
+                            echo ">" . $row22->fields['alias'] . "</option>";
                             $row22->MoveNext();
                         }
                         echo "</select>";
                     }
 
 
-                    $row2 = $db->Execute("SELECT p.orders_products_id, p.orders_id, p.orders_products_id, p.products_name, p.po_number,  p.po_sent_to_subcontractor, p.products_id, p.po_date  FROM " . TABLE_ORDERS_PRODUCTS . " as p, " . TABLE_ORDERS . " as o WHERE  p.orders_id=o.orders_id AND p.po_sent='1'
-                        AND  (p.orders_id LIKE '$orders_num') AND (p.po_number LIKE '$po_number') AND  (p.po_sent_to_subcontractor LIKE '$sub1') $zmienna2 $zmienna1 $zmienna3 ORDER BY orders_id DESC");
-
+                    $row2query = "SELECT p.orders_products_id, p.orders_id, p.orders_products_id, p.products_name, p.po_number,  p.po_sent_to_subcontractor, p.products_id, p.po_date  FROM " . TABLE_ORDERS_PRODUCTS . " as p, " . TABLE_ORDERS . " as o WHERE  p.orders_id=o.orders_id AND p.po_sent='1'"; 
+                    if ($orders_num != '%') {
+                        $row2query .= " AND  (p.orders_id LIKE '$orders_num') ";
+                    }
+                    if ($po_number != '%') {
+                        $row2query .= " AND (p.po_number = " . (int)$po_number . ") "; 
+                    }
+                    if ($sub1 != '%') {
+                        $row2query .= " AND  (p.po_sent_to_subcontractor LIKE '$sub1') ";  
+                    }
+                    $row2query .= " " . $zmienna2 . " " . $zmienna1 . " " . $zmienna3 . " " . "ORDER BY orders_id DESC";
+                    $row2 = $db->Execute($row2query); 
 
 //wyswietlanie danych
                     $i = 1;
@@ -650,30 +659,30 @@ function zen_get_products_manufacturers_name($product_id) {
                         if ($i % 2 == 1) {
 
                             echo "<tr class='dataTableRowSelected'>" .
-                                "<td  align='center'>$row2->fields['orders_id']</td><td  align='center'>$row3->fields['customers_name']</td><td  align='center'>$row2->fields['products_name']</td><td align='center'><input type='checkbox' name='pos$i'>" .
+                                "<td  align='center'>" . $row2->fields['orders_id'] . "</td><td  align='center'>" . $row3->fields['customers_name'] . "</td><td  align='center'>". $row2->fields['products_name'] . "</td><td align='center'><input type='checkbox' name='pos" . $i. "'>" .
 
                                 "</td><td  align='center'>";
                             sub($row2->fields['products_id'], $i);
                             echo "</td>" .
-                                "<td  align='center'>$row100->fields['alias']</td>" .
-                                "<td  align='center'>$row2->fields['po_number']</td>" .
-                                "<td  align='center'>$row2->fields['po_date']</td>" .
-                                "</tr><input type='hidden' name='opi$i' value='$row2->fields['orders_products_id']'><input type='hidden' name='id$i' value=$row2->fields['orders_products_id']>";
+                                "<td  align='center'>" . $row100->fields['alias'] . "</td>" .
+                                "<td  align='center'>" . $row2->fields['po_number'] . "</td>" .
+                                "<td  align='center'>" . $row2->fields['po_date'] . "</td>" .
+                                "</tr><input type='hidden' name='opi". $i. "' value='" .$row2->fields['orders_products_id']. "'><input type='hidden' name='id" . $i . "' value=" . $row2->fields['orders_products_id'] . ">";
 
                         }
 
                         if ($i % 2 == 0) {
 
                             echo "<tr class='dataTableRow'>" .
-                                "<td  align='center'>$row2->fields['orders_id']</td><td  align='center'>$row3->fields['customers_name']</td><td  align='center'>$row2->fields['products_name']</td><td align='center'><input type='checkbox' name='pos$i'>" .
+                                "<td  align='center'>" . $row2->fields['orders_id'] . "</td><td  align='center'>" . $row3->fields['customers_name'] . "</td><td  align='center'>" . $row2->fields['products_name']. "</td><td align='center'><input type='checkbox' name='pos" . $i . "'>" .
 
                                 "</td><td  align='center'>";
                             sub($row2->fields['products_id'], $i);
                             echo "</td>" .
-                                "<td  align='center'>$row100->fields['alias']</td>" .
-                                "<td  align='center'>$row2->fields['po_number']</td>" .
-                                "<td  align='center'>$row2->fields['po_date']</td>" .
-                                "</tr><input type='hidden' name='opi$i' value='$row2->fields['orders_products_id']'><input type='hidden' name='id$i' value=$row2->fields['orders_products_id']>";
+                                "<td  align='center'>" . $row100->fields['alias'] . "</td>" .
+                                "<td  align='center'>" . $row2->fields['po_number'] .  "</td>" .
+                                "<td  align='center'>" . $row2->fields['po_date'] . "</td>" .
+                                "</tr><input type='hidden' name='opi" . $i . "' value='" . $row2->fields['orders_products_id'] . "'><input type='hidden' name='id" . $i ."' value=" . $row2->fields['orders_products_id'] . ">";
 
                         }
 
@@ -809,11 +818,13 @@ function zen_get_products_manufacturers_name($product_id) {
                         $skrypt = "send_pos.php?";
 
 
-                        $queryxx = $db->Execute("SELECT p.orders_products_id, p.orders_id, p.orders_products_id, p.products_name, p.products_id, o.shipping_method, o.delivery_state, p.products_quantity, o.delivery_street_address, o.delivery_city, o.delivery_suburb, o.delivery_postcode, o.delivery_country, o.delivery_company, o.delivery_name, p.products_model FROM " . TABLE_ORDERS_PRODUCTS . " as p, " . TABLE_ORDERS . " as o WHERE  p.orders_id=o.orders_id AND po_sent='0' AND o.orders_status != 3 AND po_number  IS NULL");
+                        $count_query = "SELECT p.orders_products_id, p.orders_id, p.orders_products_id, p.products_name, p.products_id, o.shipping_method, o.delivery_state, p.products_quantity, o.delivery_street_address, o.delivery_city, o.delivery_suburb, o.delivery_postcode, o.delivery_country, o.delivery_company, o.delivery_name, p.products_model FROM " . TABLE_ORDERS_PRODUCTS . " as p, " . TABLE_ORDERS . " as o WHERE  p.orders_id=o.orders_id AND po_sent='0' AND o.orders_status != 3 AND po_number  IS NULL";
+                        $queryxx = $db->Execute($count_query); 
 
                         $l_odp = $queryxx->RecordCount();
 
-                        $row2 = $db->Execute("SELECT p.orders_products_id, p.orders_id, p.orders_products_id, p.products_name, p.products_id, o.shipping_method, o.delivery_state, p.products_quantity, o.delivery_street_address, o.delivery_city, o.delivery_suburb, o.delivery_postcode, o.delivery_country, o.delivery_company, o.delivery_name, p.products_model FROM " . TABLE_ORDERS_PRODUCTS . " as p, " . TABLE_ORDERS . " as o WHERE  p.orders_id=o.orders_id AND po_sent='0' AND o.orders_status !=3 AND po_number  IS NULL LIMIT $start, $l_odp_nastronie");
+                        $show_query = $count_query .  " ORDER BY p.orders_id DESC LIMIT $start, $l_odp_nastronie";
+                        $row2 = $db->Execute($show_query); 
 
                         $i = 1;
                         while (!$row2->EOF) {

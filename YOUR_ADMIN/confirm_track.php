@@ -145,7 +145,7 @@ require(DIR_WS_CLASSES . 'currencies.php');
                    $orderaddresscompany="";
                 else
                    $orderaddresscompany=$row1->fields['delivery_company']."<br />";
-                echo $row1[0]."<br />".$orderaddresscompany.$row1->fields['delivery_street_address'].$orderaddresssuburb."<br />".$row1->fields['delivery_city'].", ".$row1->fields['delivery_state']." ".$row1->fields['delivery_postcode']."<br />".$orderaddresscountry;
+                echo $row1->fields['delivery_name']."<br />".$orderaddresscompany.$row1->fields['delivery_street_address'].$orderaddresssuburb."<br />".$row1->fields['delivery_city'].", ".$row1->fields['delivery_state']." ".$row1->fields['delivery_postcode']."<br />".$orderaddresscountry;
                                 ?>
                                 </td>
                                </tr>
