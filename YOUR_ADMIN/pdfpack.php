@@ -5,6 +5,7 @@
 // Version 1.01 - Modified For Packing List
 
 
+require_once(DIR_WS_CLASSES . 'fpdf/fpdf.php');  
 class INVOICE extends FPDF
 {
 // private variables
