@@ -14,6 +14,14 @@ CREATE TABLE IF NOT EXISTS `subcontractors_shipping` (
   PRIMARY KEY (`subcontractors_id`)
 );
 
+CREATE TABLE IF NOT EXISTS `subcontractors_to_customers` (
+  `s2cid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `subcontractors_id` int(10) unsigned NOT NULL, 
+  `customers_id` int(10) unsigned NOT NULL, 
+  PRIMARY KEY (`s2cid`),
+  KEY s2c_sub (subcontractors_id)
+);
+
 INSERT INTO subcontractors_shipping (alias, name, street1, city, state, zip, country, email_address, telephone, contact_person) VALUES ('ownstock', 'Own stock', 'Street','City','State','ZIP','Country', 'email@email.com','telephone','contact name');
 
 ALTER TABLE `orders_products`
