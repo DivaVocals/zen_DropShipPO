@@ -205,8 +205,25 @@ The following items have shipped:
     }
 }
 else{
-$x = $_GET[x];
-$y = $_GET[y];
+$x = (int)$_GET[x];
+$y = (int)$_GET[y];
+
+// X is sub id.
+// If you're not a superuser, you should be logged in as this id.
+if (!zen_is_superuser()) { 
+   $recs = $db->Execute("SELECT subcontractors_id FROM " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . " WHERE customers_id = " . $_SESSION['admin_id']); 
+   $found = false; 
+   while (!$recs->EOF) { 
+        if ($recs->fields['subcontractors_id'] == $x) { 
+           $found = true; break;
+        }
+        $recs->MoveNext(); 
+   }
+   if (!$found) {
+      echo "<font class='tekst'>" . TRACKING_INVALID. "</font>";;
+      return; 
+   }
+}
 
 //funkcja sprawdzajaca czy istnieje taki numer po i subkontraktor przyporzadkowany temu numerowi
 function ilosc($y, $x)

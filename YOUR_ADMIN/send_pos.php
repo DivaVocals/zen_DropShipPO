@@ -763,16 +763,16 @@ function zen_get_products_manufacturers_name($product_id) {
                             <?php echo TABLE_ORDER_SHIPPING; ?><br>
 
                         </td>
-                        <td width='20%' class="dataTableHeadingContent" align="center">
+                        <td width='15%' class="dataTableHeadingContent" align="left">
                             <?php echo TABLE_ORDER_ADDRESS; ?><br>
 
                         </td>
-                        <td width='5%' class="dataTableHeadingContent" align="center">
+                        <td width='10%' class="dataTableHeadingContent" align="left">
                             <?php echo TABLE_ORDER_PRODUCT_MANUFACTURER; ?><br>
 
 
                         </td>
-                        <td width='15%' class="dataTableHeadingContent" align="center">
+                        <td width='15%' class="dataTableHeadingContent" align="left">
                             <?php echo TABLE_PRODUCTS_NAME; ?><br>
 
 
@@ -812,7 +812,7 @@ function zen_get_products_manufacturers_name($product_id) {
 
                         $a = $_GET["a"];
                         $l_odp_napasku = '10';
-                        $l_odp_nastronie = '100';
+                        $l_odp_nastronie = '10';
                         $start = $a * $l_odp_nastronie;
 
                         $skrypt = "send_pos.php?";
@@ -859,7 +859,7 @@ function zen_get_products_manufacturers_name($product_id) {
                                 echo "<tr class='dataTableRowSelected'>";
                             else
                                 echo "<tr class='dataTableRow'>";
-                            echo "<td  align='center'>" . $row2->fields['orders_id'] . "</td><td  align='center'>" . $catmeow . "</td><td  align='center'>" . $row2->fields['shipping_method'] . "</td><td  align='center'>" . $row2->fields['delivery_name'] . "<br />" . $ordersaddress . "</td><td  align='center'>" . $manufacturernamed . $row2->fields['products_model'] . "</td><td  align='center'>" . $row2->fields['products_quantity'] . "x" . $row2->fields['products_name'] . $attributes . "</td><td align='center'><input type='checkbox' name='pos" . $i. "'>" .
+                            echo "<td  align='center'>" . $row2->fields['orders_id'] . "</td><td  align='center'>" . $catmeow . "</td><td  align='center'>" . $row2->fields['shipping_method'] . "</td><td  align='left'>" . $row2->fields['delivery_name'] . "<br />" . $ordersaddress . "</td><td  align='left'>" . $manufacturernamed . "<br />" . $row2->fields['products_model'] . "</td><td  align='left'>" . $row2->fields['products_quantity'] . "x" . $row2->fields['products_name'] . $attributes . "</td><td align='center'><input type='checkbox' name='pos" . $i. "'>" .
 
                                 "</td><td  align='center'>";
                             sub($row2->fields['products_id'], $i);
