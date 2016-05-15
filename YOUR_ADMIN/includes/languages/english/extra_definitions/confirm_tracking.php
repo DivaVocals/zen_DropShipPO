@@ -46,5 +46,5 @@ define('SUBCONTRACTOR_TRACKING_THANKYOU', 'Thank you for submitting tracking inf
 define('PO_SENT_TO_NAME', 'P.O. Sent To');
 define('SHOW_OLDEST_PO_FIRST', 'Show Oldest Purchase Orders First');
 define('SHOW_NEWEST_PO_FIRST', 'Show Newest Purchase Orders First');
-define('BOX_CUSTOMERS_CONFIRM_TRACKING_SUB', 'Confirm Tracking for SCs'); 
+define('BOX_CUSTOMERS_CONFIRM_TRACKING_SUB', 'Confirm Tracking for Suppliers'); 
 ?>

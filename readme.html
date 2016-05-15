@@ -8,7 +8,7 @@
 <body>
 <h1>DROP SHIP PURCHASE ORDERS USER'S MANUAL</h1>
 
-  All of the options are available in the admin, of course.</p>
+  All of the options are available in the admin.</p>
 <ol>
   <li><strong>Tools-&gt;PO Edit subcontractors</strong><br />
     You can enter a list of subcontractors/dropshippers (SCs from now on) you work with (all their contact info, emails, phone, etc.)</li>
@@ -29,11 +29,41 @@ To allow SCs to set these numbers, do the following:
 <ol>
 <li>In Admins-&gt;Admin Profiles, create a profile with a name like 
 "Supplier" or "SC".  For this profile, only permit them to 
-access Customers-&gt;Confirm Tracking for SCs. </li>
+access Customers-&gt;Confirm Tracking for Suppliers. </li>
 <li>In Admins-&gt;Admin Users, create an account for the SC, with 
 the profile you created above (Supplier or SC).</li>
 <li>In Tools-&gt;PO Edit Subcontractors, set their customer id.</li>
 </ol>
+</ol>
+
+<h2> Suggested Code Customizations </h2>
+<ol>
+<li>If you do not wish your SCs to be able to see the widgets on the 
+front page of your admin page, make the following change: 
+In admin/index_dashboard.php, right under 
+<pre>
+&lt;!-- header_eof //--&gt;
+</pre> 
+add this code: 
+<pre> 
+&lt;?php  
+// If your userid is in the suppliers table, you have no business here.
+$supplier = false; 
+if (!zen_is_superuser()) { 
+   $recs = $db-&gt;Execute("SELECT subcontractors_id FROM " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . " WHERE customers_id = " . $_SESSION['admin_id']); 
+   if (!$recs-&gt;EOF) { 
+      $supplier = true; 
+   }
+}
+if (!$supplier) { 
+?&gt;
+</pre>
+
+Then at the bottom of the file, just close the brace. 
+<pre>
+&lt;?php } ?&gt;
+</pre>
+
 </li>
 </ol>
 <hr />
