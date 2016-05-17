@@ -44,16 +44,14 @@ In admin/index_dashboard.php, right under
 <pre>
 &lt;!-- header_eof //--&gt;
 </pre> 
-add this code: 
+add this code.  In this case, the Suppliers profile id is 6: 
 <pre> 
 &lt;?php  
 // If your userid is in the suppliers table, you have no business here.
 $supplier = false; 
 if (!zen_is_superuser()) { 
-   $recs = $db-&gt;Execute("SELECT subcontractors_id FROM " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . " WHERE customers_id = " . $_SESSION['admin_id']); 
-   if (!$recs-&gt;EOF) { 
-      $supplier = true; 
-   }
+   $recs = $db->Execute("SELECT admin_profile FROM " . TABLE_ADMIN. " WHERE admin_id = " . $_SESSION['admin_id']); 
+   if ($recs-&gt;fields['admin_profile'] == 6) $supplier = true; 
 }
 if (!$supplier) { 
 ?&gt;
