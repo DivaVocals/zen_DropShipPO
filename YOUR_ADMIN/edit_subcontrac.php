@@ -60,17 +60,10 @@ require(DIR_WS_CLASSES . 'currencies.php');
 //delete
 // pobieranie rozkazu i wykannie go
 if (isset($_GET['what']) AND $_GET['what'] == 'delete') {
-    $did = $_GET['did'];
+    $did = (int)$_GET['did'];
     $result = $db->Execute("DELETE FROM " . TABLE_SUBCONTRACTORS_SHIPPING . " WHERE subcontractors_id='$did' LIMIT 1");
+    $result = $db->Execute("DELETE FROM " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . " WHERE subcontractors_id='$did' LIMIT 1");
 }
-
-//save
-if (isset($_GET['what']) AND $_GET['what'] == 'save') {
-
-    $sid = $_GET['sid'];
-    $result = $db->Execute("UPDATE " . TABLE_SUBCONTRACTORS_SHIPPING . " SET WHERE subcontractors_id='$sid' LIMIT 1");
-}
-
 
 //pobieranie danych dla polecenia inser oraz wykannaie go
 if (isset($_GET['pole']) AND $_GET['pole'] == 1) {
@@ -82,12 +75,17 @@ if (isset($_GET['pole']) AND $_GET['pole'] == 1) {
     $state = $_GET['state'];
     $telephone = $_GET['telephone'];
     $contact_person = $_GET['contact_person'];
+    $cust_id = (int)$_GET['cust_id'];
     $e_mail = $_GET['e_mail'];
 
     $db->Execute("INSERT INTO " . TABLE_SUBCONTRACTORS_SHIPPING . "(alias, name, street1, zip, email_address, telephone, contact_person, city, state)
 VALUES('$alias','$name','$street','$zip','$e_mail','$telephone','$contact_person', '$city', '$state')")
     or die("Nie mozna ustawic nowych rekordow1");
     echo "<meta http-equiv=\"refresh\" content=\"0 url=edit_subcontrac.php\">";
+
+    $insert_id = $db->Insert_ID();
+    $db->Execute("INSERT INTO " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . "(subcontractors_id, customers_id) VALUES ('$insert_id', '$cust_id')");
+ 
 }
 
 //save
@@ -103,10 +101,19 @@ if (isset($_GET['pole']) AND $_GET['pole'] == 0) {
     $contact_person = $_GET['contact_person'];
     $e_mail = $_GET['e_mail'];
     $key = $_GET['key'];
+    $cust_id = (int)$_GET['cust_id'];
 
     $result = $db->Execute("UPDATE " . TABLE_SUBCONTRACTORS_SHIPPING . " SET alias='$alias', name='$name',
  street1='$street', zip='$zip', city='$city', state='$state', email_address='$e_mail', telephone='$telephone', contact_person='$contact_person'
  WHERE subcontractors_id='$key' LIMIT 1");
+    // Insert or create new record 
+
+    $rec = $db->Execute("SELECT customers_id FROM " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . " WHERE subcontractors_id='$key'"); 
+    if ($rec->EOF) { 
+    $db->Execute("INSERT INTO " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . "(subcontractors_id, customers_id) VALUES ('$key', '$cust_id')");
+    } else { 
+       $db->Execute("UPDATE " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . " SET customers_id = " . $cust_id . " WHERE subcontractors_id='$key' LIMIT 1"); 
+    }
 }
 
 
@@ -175,9 +182,12 @@ if (isset($_GET['list_order'])) {
                     <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=person'); ?>"><?php echo($_GET['list_order'] == 'person' ? '<span class="SortOrderHeader">Asc</span>' : '<span class="SortOrderHeaderLink">Asc</b>'); ?></a>&nbsp;
                     <a href="<?php echo zen_href_link(basename($PHP_SELF) . '?list_order=persondesc'); ?>"><?php echo($_GET['list_order'] == 'persondesc' ? '<span class="SortOrderHeader">Desc</span>' : '<span class="SortOrderHeaderLink">Desc</b>'); ?></a>
                 </td>
+                <td width='10%' class="dataTableHeadingContent" align="center">
+                    <?php echo TABLE_CUST_ID; ?>
+                </td>
 
 
-                <td width='15%' class="dataTableHeadingContent" align="right"><?php echo ACTION; ?>&nbsp;<br>
+                <td width='5%' class="dataTableHeadingContent" align="right"><?php echo ACTION; ?>&nbsp;<br>
 
             </tr>
 
@@ -187,11 +197,11 @@ if (isset($_GET['list_order'])) {
 
             $cid = $_GET['cID'];
             if ($cid == '') {
-                $row2 = $db->Execute("SELECT subcontractors_id, alias,  name, email_address,  telephone, contact_person FROM " . TABLE_SUBCONTRACTORS_SHIPPING . " LIMIT 1");
+                $row2 = $db->Execute("SELECT s.subcontractors_id, alias,  name, email_address,  telephone, contact_person, sc.customers_id FROM " . TABLE_SUBCONTRACTORS_SHIPPING . " s LEFT JOIN " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . " sc ON s.subcontractors_id = sc.subcontractors_id LIMIT 1");
 
                 $cid = $row2->fields['subcontractors_id'];
             }
-            $row = $db->Execute("SELECT subcontractors_id, alias,  name, email_address,  telephone, contact_person   FROM " . TABLE_SUBCONTRACTORS_SHIPPING . " order by $disp_order");
+            $row = $db->Execute("SELECT s.subcontractors_id, alias,  name, email_address,  telephone, contact_person, sc.customers_id   FROM " . TABLE_SUBCONTRACTORS_SHIPPING . " s LEFT JOIN " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . " sc ON s.subcontractors_id = sc.subcontractors_id order by $disp_order");
             $k = 0;
             while (!$row->EOF) {
                 if ($cid != $row->fields['subcontractors_id']) {
@@ -208,6 +218,7 @@ if (isset($_GET['list_order'])) {
                 echo "<td align='center'>" . $row->fields['email_address'] . "</td>";
                 echo "<td align='center'>" . $row->fields['telephone'] . "</td>";
                 echo "<td align='center'>" . $row->fields['contact_person'] . "</td>";
+                echo "<td align='center'>" . $row->fields['customers_id'] . "</td>";
                 if ($k == '0') {
                     $fond[0] = $row->fields['subcontractors_id'];
                     $fond[1] = $row->fields['alias'];
@@ -240,7 +251,7 @@ if (isset($_GET['list_order'])) {
         <table border="0" width='100%' cellspacing="0" cellpadding="2" align="center">
             <tr>
                 <?php
-                $row2 = $db->Execute("SELECT * FROM " . TABLE_SUBCONTRACTORS_SHIPPING . " WHERE subcontractors_id='$cid'");
+                $row2 = $db->Execute("SELECT s.subcontractors_id, alias,  name, email_address,  street1, city, state, zip, country, telephone, contact_person, sc.customers_id FROM " . TABLE_SUBCONTRACTORS_SHIPPING . "  s LEFT JOIN " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . " sc ON s.subcontractors_id = sc.subcontractors_id WHERE s.subcontractors_id='$cid'");
 
                 // projekt szablonu do wyswietlania subcontracotow oraz wyswietlanie ich
                 ?>
@@ -300,6 +311,12 @@ if (isset($_GET['list_order'])) {
                     <td align="right" class="infoBoxContent"><?php echo TABLE_CONTACT_PERSON; ?></td>
                     <td align="left" class="infoBoxContent"><input type='text' name="contact_person"
                                                                    value="<?php echo $row2->fields['contact_person']; ?>">
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" class="infoBoxContent"><?php echo TABLE_CUST_ID; ?></td>
+                    <td align="left" class="infoBoxContent"><input type='text' name="cust_id"
+                                                                   value="<?php echo $row2->fields['customers_id']; ?>">
                     </td>
                 </tr>
                 <input type="hidden" name="pole"><input type='hidden' name="key"

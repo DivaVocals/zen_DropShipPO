@@ -131,7 +131,7 @@ The following items have shipped:
 
             $row_notify = $db->Execute("SELECT configuration_value FROM " . TABLE_CONFIGURATION . " WHERE configuration_key='PO_NOTIFY'");
 
-            if ($row_notify['configuration_value'] == 1) {
+            if ($row_notify->fields['configuration_value'] == 1) {
 
                 if ($order_shipping_complete == 1) {
                     $customer_notified = 1;
@@ -205,8 +205,25 @@ The following items have shipped:
     }
 }
 else{
-$x = $_GET[x];
-$y = $_GET[y];
+$x = (int)$_GET[x];
+$y = (int)$_GET[y];
+
+// X is sub id.
+// If you're not a superuser, you should be logged in as this id.
+if (!zen_is_superuser()) { 
+   $recs = $db->Execute("SELECT subcontractors_id FROM " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . " WHERE customers_id = " . $_SESSION['admin_id']); 
+   $found = false; 
+   while (!$recs->EOF) { 
+        if ($recs->fields['subcontractors_id'] == $x) { 
+           $found = true; break;
+        }
+        $recs->MoveNext(); 
+   }
+   if (!$found) {
+      echo "<font class='tekst'>" . TRACKING_INVALID. "</font>";;
+      return; 
+   }
+}
 
 //funkcja sprawdzajaca czy istnieje taki numer po i subkontraktor przyporzadkowany temu numerowi
 function ilosc($y, $x)
@@ -266,6 +283,8 @@ if (error($y, $x) == 1 AND save($y, $x) == 1)
 {
 if (ilosc($y, $x))
 {
+echo "<form name='save1' method='POST' action='confirm_track_sub.php'>"; 
+
 echo "<font class='tekst'>" . SUBCONTRACTOR_FORM_DESCRIPTION . "</font>";
 $i = 0;
 ?>
@@ -291,7 +310,7 @@ $i = 0;
 
                 $row3 = $db->Execute("SELECT delivery_name, delivery_company, delivery_street_address, delivery_city, delivery_postcode,
             delivery_state, delivery_country, delivery_suburb
-            FROM " . TABLE_ORDERS . " WHERE orders_id='$row2[3]'");
+            FROM " . TABLE_ORDERS . " WHERE orders_id='" . $row2->fields['orders_id'] . "'");
                 if ($row3->fields['delivery_suburb'] == "" ||
                     $row3->fields['delivery_suburb'] == NULL
                 )
@@ -308,13 +327,12 @@ $i = 0;
                 ?>
                 <tr>
                     <td width='5%' class='td' valign="top"><font
-                            class='tekst'><?php echo $row2[3] . "-" . $row2[0]; ?></font></td>
-                    <td width='10%' class='td' valign="top"><font class='tekst'><?php echo $row2[4]; ?></font></td>
+                            class='tekst'><?php echo $row2->fields['orders_id'] . "-" . $row2->fields['po_number']; ?></font></td>
+                    <td width='10%' class='td' valign="top"><font class='tekst'><?php echo $row2->fields['po_date']; ?></font></td>
                     <td width='20%' class='td' valign="top"><font class='tekst'><?php echo $ordersaddress; ?></font>
                     </td>
                     <td class='td_zakonczenie'>
                         <table border="0" cellspacing="0" cellpadding="3">
-                            <form name='save1' method='POST' action='confirm_track_sub.php'>
 
                                 <tr>
                                     <td><font class='tekst'>
@@ -370,7 +388,7 @@ $i = 0;
 
                     $row6 = $db->Execute("SELECT orders_id, orders_products_id, products_options, products_options_values
                                          FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . "
-                                         WHERE orders_products_id='$row5->fields['orders_products_id']' AND orders_id='$row5->fields['orders_id']'");
+                                         WHERE orders_products_id='" . $row5->fields['orders_products_id'] ."' AND orders_id='" . $row5->fields['orders_id']. "'");
 
                     $attributes = '';
                     while (!$row6->EOF) {
@@ -383,24 +401,27 @@ $i = 0;
                     <tr>
                         <td align="center" class='td' valign='top'><input type='checkbox'
                                                                           name='<?php echo "orders_products_id_" . $i ?>'
-                                                                          value='<?php echo $row5[2]; ?>' CHECKED></td>
+                                                                          value='<?php echo $row5->fields['orders_products_id']; ?>' CHECKED></td>
                         <td class='td_zakonczenie'><font
-                                class='tekst'><?php echo $row5[1] . "<br>" . $attributes; ?></font></td>
+                                class='tekst'><?php echo $row5->fields['products_name'] . "<br>" . $attributes; ?></font></td>
                     </tr>
                     <?php
-                    echo "<input type='hidden' name='orders_id_$i' value='$row5[0]'>";
+                    echo "<input type='hidden' name='orders_id_$i' value='" . $row5->fields['orders_id']. "'>";
                     $i++;
                     $row5->MoveNext();
                 }
                 echo "<input type='hidden' name='ile' value='$i'>";
+                echo "<input type='hidden' name='x' value='$x'>";
+                echo "<input type='hidden' name='y' value='$y'>";
+                echo "<input type='hidden' name='save' value='save'>";
                 ?>
                 <tr>
                     <td COLSPAN="2" align='center'><input class="normal_button button" type="button"
                                                           value="<?php echo IMAGE_SAVE; ?>" name='insert'
-                                                          ONCLICK="javascript:document.set.submit();"></td>
+                                                          ONCLICK="javascript:document.save1.submit();"></td>
                 </tr>
-                </form>
             </table>
+            </form>
 
             <?php
             }

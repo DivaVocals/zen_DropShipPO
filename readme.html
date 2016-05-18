@@ -2,139 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
+<title>Drop Ship Purchase Orders</title>
 </head>
 
 <body>
-<p>*****************************<br />
-  *** PURCHASE ORDERS V3.20 ***<br />
-  *****************************<br />
-</p>
-<p>* Version 3.20 updated by Numinix.com *<br />
-  *                           *<br />
-</p>
-<p>* Version 2.0, 3.0-3.12 by  Scott Turner *<br />
-  *          birdingdepot.com *<br />
-  *                           *<br />
-</p>
-<p>* Commisioned by            Jack Mikol *<br />
-  *         www.bumpernut.com *<br />
-  *                           *<br />
-</p>
-<p>* Designed by               Maciej Szleminski *<br />
-  *      www.redlinegoods.com *<br />
-  *                           *<br />
-</p>
-<p>* With a lot of help from   Prattski *<br />
-  *****************************<br />
-</p>
-<p>DISCLAIMER<br />
-  Provided AS-IS. No warranty either expressed or implied. Use at your own risk. :) Check the Zen Cart forum for help with version 3.0.  A previous author added: When in doubt, email mszleminski@gazeta.pl with your questions. They will be answered on first-come first served basis depending on my free time.</p>
-<p>If you feel like expressing some gratitude for our efforts, please take a kind look at our stores to see what we offer. And buy some, if you find the products interesting. :)  I'd also really appreciate a link on your web site.</p>
-<p>To upgrade to version 3, SQL changes are necessary.  See the installation instructions below.</p>
-<p>I like to give a special thanks to everyone who worked on the following.  Without them this contribution would not be possible:<br />
-  Everyone who has created or worked on this before me!<br />
-</p>
-<ul>
-  <li>  Xavier Nicolay - Created an invoice script for FPDF that the packing lists in this contribution are based on.<br />
-  </li>
-  <li>Anyone who worked on the Edit Orders Mod including - Kathleen, Igor Couto, Scot http://www.ecdiscounts.com</li>
-  <li>Josh Beauregard http://www.sanguisdevelopment.com</li>
-  <li>Numinix Technology http://www.numinix.com - Code was adapted from this mod for send_pos_nc.php for adding products.<br />
-  </li>
-</ul>
-<hr />
-<p><br />
-  *****************************<br />
-  INSTALLATION &amp; CONFIGURATION<br />
-  *****************************<br />
-UPGRADES TO VERSION 3.21 FROM ANY PRIOR VERSION -- Copy the entire directory structure overwriting all files when necessary.  Delete this file if it exists: admin/includes/boxes/extra_boxes/send_pos_nc_customers_dhtml.php.  No SQL changes are necessary.</p>
+<h1>DROP SHIP PURCHASE ORDERS USER'S MANUAL</h1>
+
+  All of the options are available in the admin.</p>
 <ol>
-  <li> Install Ty_Package_Tracker and configure it properly before you continue. The definition of carriers is the most important one, as our module will plug into it for consistency. If you are not interested in the tracking functionalities of this module, skip this step.  PLEASE NOTE!  I have never tested version 2.0 or 3.0 of this modification without Ty_Package_Tracker!!  Install at your own risk if you don't use Ty_Package_Tracker!!</li>
-  <li> Run dbscript.sql on your database. Via Tools-&gt;Install SQL patches (need to copy the section that applies to your install situation -- <strong>new, or upgrade</strong> -- into clipboard and paste it into the screen).</li>
-  <li> If you are not interested in the tracking functionalities, you need to remove links to that functionality so that your admin menu doesn't show them. In the contribution files, find <strong>admin/includes/extra_configures/purchaseorders.php</strong> and add two slashes (//) in front of these two lines:<br />
-<ul>
-<li>define('FILENAME_CONFIRM_TRACKING', 'confirm_track');</li>
-<li>define('FILENAME_CONFIRM_TRACKING_SUB', 'confirm_track_sub');</li>
-</ul>
-</li>
-  <li>Rename the admin directory to the same name as your admin directory and then copy the entire directory structure (email to email and admin to whatever is the name of your admin directory) to your store.</li>
-  <li>Customize the email templates if you want. There are three text files in the <strong>email</strong> folder starting with <strong>email_dropship_po_</strong>. These contain the templates for the PO description (header and footer) and the PO fields (the product data rows). The tags enclosed in {} brackets are replaced with actual values when POs are being sent. I`m sure the rest is self-explanatory. :) For a complete list of tags you can use, see the next section of this file.<br />
-    <ul>
-      <li>  Also please note that the ONLY valid tags for the subject of the PO are: po_number, contact_person, full_name, short_name, and order_number.<br />
-        <br />
-        If you are removing tracking functionality or do not want sub-contractors to submit tracking data, make sure to remove the {tracking_link} tag so that the emails do not contain a link for your subcontractors to enter tracking information.</li>
-    </ul>
-  </li>
-  <li>Configure some variables in <strong>Admin-&gt;Configuration-&gt;DropShip Purchase Orders</strong>.</li>
-  <li>Test. I would suggest adding a fake supplier with your email address in the respective field, submitting a test order to your store, setting yourself as the default PO and sending out a PO to yourself, then entering the tracking either via admin or, better yet, through the link provided in the email.</li>
-  <li>Backup. If you have customized your email templates in any way, make sure to copy them to  the <strong>email</strong> folder - updated distributions of this contribution will come with standard email templates and you probably wouldn't want your customizations to get overwritten.</li>
-</ol>
-<p>ENJOY!</p>
-<p>*****************************<br />
-  TAGS FOR EMAIL FILES<br />
-  *****************************<br />
-  email_header.txt<br />
-  ----------------<br />
-  {customers_name} - Name of customer<br />
-  {order_number} - Order Number<br />
-  {customers_adres} - Customer's Address<br />
-  {customers_phone} - Customer's Phone Number<br />
-  {customers_email} - Customer's Email Address<br />
-  {delivery_name} - Name of Person for Shipping<br />
-  {po_comments} - Comments you enter on Send PO page for the PO<br />
-  {customers_comments} - The customer's order comments<br />
-  {delivery_company} - Name of Company for Shipping<br />
-  {delivery_adress} - Shipping Address<br />
-  {billing_company} - Name of Company for Billing<br />
-  {billing_name} - Name of Person for Billing<br />
-  {billing_address} - Billing Address<br />
-  {payment_method} - Payment Method<br />
-  {date_purchased} - Date Purchased<br />
-  {po_number} - Purchase Order Number</p>
-<p>email_products.txt<br />
-  ------------------<br />
-  {manufacturers_name} - Manufacturer of Product<br />
-  {products_name} - Name of Product<br />
-  {products_model} - Model of Product<br />
-  {final_price} - Price of Product<br />
-  {products_quantity} - Quantity of Product<br />
-  {products_attributes} - Product Attributes<br />
-  {po_number} - Purchase Order Number</p>
-<p>email_footer.txt<br />
-  ----------------<br />
-  {tracking_link} - Link for Subcontractor to Enter Tracking Number</p>
-<p>any of the three email files<br />
-  ----------------------------<br />
-  {shipping_method} - Shipping Method<br />
-  {contact_person} - Subcontractor Contact<br />
-  {full_name} - Full Name of Subcontractor<br />
-  {short_name} - Short Name of Subcontractor<br />
-  {subcontractors_id} - Subcontractor's ID Number<br />
-  {street} - Subcontractor's Street Address<br />
-  {city} - Subcontractor's City<br />
-  {state} - Subcontractor's State<br />
-  {zip} - Subcontractor's Zip Code<br />
-  {telephone} - Subcontractor's Telephone Number<br />
-  {email_address} - Subcontractor's Email Address</p>
-<p>email title - change in admin-configuration-purchase orders<br />
-  -----------------------------------------------------------<br />
-  {po_number} - Purchase Order Number<br />
-  {contact_person} - Subcontractor Contact<br />
-  {full_name} - Full Name of Subcontractor<br />
-  {short_name} - Short Name of Subcontractor<br />
-  {order_number} - Order Number</p>
-<p>&nbsp;</p>
-<p>*****************************<br />
-  USER'S MANUAL (CRUDE FOR NOW)<br />
-  *****************************<br />
-  All of the options are available in the admin, of course.</p>
-<ol>
-  <li><strong>Tools/EDIT SUBCONTRACTORS</strong><br />
+  <li><strong>Tools-&gt;PO Edit subcontractors</strong><br />
     You can enter a list of subcontractors/dropshippers (SCs from now on) you work with (all their contact info, emails, phone, etc.)</li>
-  <li><strong>Tools/SET SUBCONTRACTORS</strong><br />
+  <li><strong>Tools-&gt;PO Assign to products</strong><br />
     You can set a default SC for each product</li>
-  <li><strong>CUSTOMERS/SEND POS</strong><br />
+  <li><strong>Customers-&gt;Send/Resend POs</strong><br />
     Using admin you can send POs to SCs
     <ol>
       <li> For each order in Processing you will see a list of all ordered products along with customer info in a simple table. For any 1+ -&gt; all of such order items, you can send POs to their default SCs, or select another SC from a drop-down list (separate for each ordered item and customer). One of the SCs is called &quot;Own stock&quot; which means you commit to ship the item from your stock. Useful if you happen to do that. :)  Don't ever delete Own stock!</li>
@@ -144,158 +24,46 @@ UPGRADES TO VERSION 3.21 FROM ANY PRIOR VERSION -- Copy the entire directory str
       <li>You can preview and edit emails, but ONLY when sending one P.O. at a time.  You can have several products on the P.O., but they must all be from one order and for one subcontractor (i.e. the conditions that create a new P.O.!)</li>
     </ol>
 </li>
-<li><strong>CUSTOMERS/RESEND POS</strong><br />
-You will be able to re-send POs. You`d be able to search past POs by number, orders by number, date range and recipient.  If your supplier can't ship an item for some reason, you can send this to another supplier.  If there is nothing left on the previous PO, it will be deleted.  Otherwise, it will just modify the old PO by removing the old items.  ONLY THE NEW PO WILL BE SENT, but I assume if your old subcontractor is out of something that you will be communicating with them anyway!</li>
-<li><strong>CUSTOMERS/SEND POS FOR UNKNOWN CUSTOMER</strong><br />
-  This will allow you to easily send a P.O. for phone orders, ebay orders, etc...  Just fill in the customer's information, add products, and send the P.O. There is no option to review the entire email, but all customizable options can be easily edited on the screen before sending the orders, so this probably won't be necessary.</li>
+<li>Using confirm_track_sub.php: 
+To allow SCs to set these numbers, do the following: 
 <ol>
-<li> Because many options don't make sense or aren't available for unknown customers, you can omit three things from unknown customer's POs.  This can be done from the Configuration/Purchase Orders menu.</li>
-<li> These POs are not tracked.  No emails are sent to customers.  This option is simply here to make it easy to send a PO for unknown customers with a packing list to your subcontractor.</li>
-<li> There is a known bug -- any changes will be lost if you make them while adding a product.  So, just leave the other fields alone until you are done adding a product. </li>
+<li>In Admins-&gt;Admin Profiles, create a profile with a name like 
+"Supplier" or "SC".  For this profile, only permit them to 
+access Customers-&gt;Confirm Tracking for Suppliers. </li>
+<li>In Admins-&gt;Admin Users, create an account for the SC, with 
+the profile you created above (Supplier or SC).</li>
+<li>In Tools-&gt;PO Edit Subcontractors, set their customer id.</li>
 </ol>
-<li><strong>IF SUPPLIER ENTERS TRACKING INFORMATION</strong><br />
- For items sent to your own stock, you`d be able to enter tracking numbers. THIS WOULD WORK THANKS TO THE TY_PACKAGE_TRACKER Contribution. YOU NEED TO HAVE IT INSTALLED IN ORDER FOR TRACKING TO WORK!</li>
-<ol>
-<li> Each PO email will have a link to a simple form that would allow the recipient to choose which items were shipped and enter tracking info (carrier and number) for each (or all if he did it right and bundled them in a package). Thus you, the store owner, know all tracking info for each package that was shipped for that order.</li>
-<li>The comments for the order would be updated with tracking info (with a link to the carrier's tracking page already prefilled with the tracking number) and a designation which item(s) were shipped in each package.</li>
 </ol>
-<li><strong>IF YOU ENTER TRACKING INFORMATION</strong><br />
-  CUSTOMERS/POs Enter Tracking #<br />
-  Many suppliers are unwilling to enter tracking information directly into your system, but they will send you automatic emails with this information.  You can enter this information directly under Customers-POs Enter Tracking #.</li>
-<p>*****************************<br />
-  Example:</p>
-<p>- John ordered 5 items. 2 of them from SC#1, 2 of them from SC#2, the last one normally sent from your stock<br />
-  - Mary ordered 3 items. 1 from SC#1, 1 from SC#2, 1 from your stock</p>
-<p>Say you have a returned item identical to one of John`s normally sent to SC#1 on your own stock and you want to move it.</p>
-<p>Hit the Send POs screen. You`ll see 8 rows in the table. One for each ordered product. Each product would have a check box (send PO yes/no) and a drop-down menu (choosing the recipient of the PO, already prefilled upon default product SC).</p>
-<p>You`d flip all the Send PO checkboxes to yes. You would change the John`s product you happen to have from SC#1 to `Own stock`. You`d hit SEND POs.</p>
-<p>SC#1 will get 2 emails. One for each order and with one product on each one.<br />
-  SC#2 will get 2 emails. One for each order, with two products on John's order and one product on Mary's order.<br />
-  You will get 2 emails. One for each order, first with 2 products (John) and the other with 1 product (Mary).</p>
-<p>Say SC#2 cannot process Mary`s order, but SC#1 can (although he wouldn`t be the default recipient). Look up that old PO by number, change the recipient to SC#1 and hit SEND. It`s renumbered and re-dated and emailed to SC#1. <br /></ol>
-<hr />
-<p><strong>*****************************<br />
-V3.21 CHANGELOG<br />
-****************************</strong></p>
-<ol>
-  <li>Update this module so it's now REALLY v1.5.x compatible. Among the many changes:
-    <ul>
-      <li>Remove the &quot;.php&quot; extension from the entries in <strong>admin/includes/extra_configures/purchaseorders.php</strong></li>
-      <li>Made corrections to support the configuration menu (missing DB entries as well as missing an entry in the <strong>admin/includes/extra_configures/purchaseorders.php</strong> file)</li>
-    </ul>
-  </li>
-  <li>Move FPDF folder to same folder as used in Super Orders (will help ease integration with Super Orders PLUS Super Orders version has been updated for PHP 5.3 compatibility)
-    <ul>
-      <li>Made all appropriate changes to support this change you should delete existing <strong>admin/fpdf</strong> folder if you are upgrading.</li>
-    </ul>
-  </li>
-  <li>Made ALL fixes needed so that the module works with the current versions of Ty Package Tracker</li>
-  <li>Renamed email files to something a LOT less generic</li>
-  <li>Moved the tracking number entry page from shop root to the admin where it belongs. Leaving this in the shop root makes potentially leaves the name of the admin folder vulnerable. Shop owners who want to grant acces to subcontractors to enter this tracking data direct should create an appropriate login with the correct security privs so that subcontractors can access this page. (Current versions of Zen Cart will make it so that you can limit subcontractors to this page only)</li>
-</ol>
-<p><strong>*****************************<br />
-  V3.20 CHANGELOG<br />
-  ****************************</strong></p>
-<ol>
-  <li> Modified admin/send_pos.php to remove manufactures lookup function</li>
-  <li>Modified admin/send_pos_nc.php to remove manufactures lookup function</li>
-  <li>Modified dbscript.sql to Register Admin Pages</li>
-  <li>Added Purchase order number to bottom of comments of PDF Packing List</li>
-</ol>
-<p><strong>*****************************<br />
-  V3.12 CHANGELOG<br />
-  *****************************</strong><br />
-</p>
-<ol>
-  <li>HTML emails fixed.</li>
-  <li>Added {customers_comments} field for email header.</li>
-  <li>Added a list of fields to readme file.</li>
-</ol>
-<p><strong>*****************************<br />
-  V3.11 CHANGELOG<br />
-*****************************</strong></p>
-<p> This is a bug fix release.  If you are using 3.0 or 3.1, I highly recommend you upgrade.</p>
-<ol>
-  <li> Fixed problem with incorrect attributes on send PO for unknown customer page.</li>
-</ol>
-<p>Please read the instructions for upgrading carefully!</p>
-<p><strong>*****************************<br />
-  V3.1 CHANGELOG<br />
-  *****************************</strong><br />
-</p>
-<p>This is a bug fix release.  If you are using 3.0, I highly recommend you upgrade.<br />
-</p>
-<ol>
-  <li>Fixed problems with adding products on send PO for unknown customer page.</li>
-  <li> Fixed heading problems that caused issues with other headings in Zen Cart.</li>
-  <li> Renamed send PO for unknown customer page to be more consistent with mod.</li>
-  <li> Consolidated files to be more consistent.</li>
-</ol>
-<p>Please read the instructions for upgrading carefully!</p>
-<p><strong>*****************************<br />
-    V3.0 CHANGELOG<br />
-    *****************************</strong></p>
-<ol>
-  <li>     Created a way to send purchase orders to customers that are not in your database.  This is great for phone orders, ebay orders, etc...</li>
-  <li> Added the ability to review a purchase order before sending it.  This allows you to make changes that are specific to one subcontractor...or just simply change stuff on a P.O. any time before sending it.<br />
-    Added several options to the database to give this mod more flexibility and decrease the effort needed to make this mod do what you want.  Here are some notable additions to the database:<br />
-    <ul>
-    <li> Change a shipping option automatically.  For example, you can make a shipping option read &quot;Cheapest&quot; on the P.O.</li>
-    <li>Omit things from the P.O. when sent to a customer who is not on Zen Cart.</li>
-    <li>Edit messages to customers when PO is sent and when packages ship.</li>
-    <li>Edit messages that are placed on packing lists.</li>
-    <li>Added the ability to choose whether or not packing lists are sent.</li>
-    <li>Choose the packing list filename.</li>
-</ul>
 
-  <li> Got rid of database entry for Own Stock -- This was redundant.  Just use the &quot;Own Stock&quot; subcontractor entry!</li>
-  <li>  Moved English language stuff in admin directory to the appropriate language files.  This still needs to be done for confirm_track_sub.php.  Maybe someday!</li>
-  <li> Automatically retrieves store information for packing list, which makes installation easier -- one less thing to modify.</li>
-  <li> Added the ability to change the sort order of the confirm tracking page.</li>
-  <li> Changed layout of send PO page.  Much more info is included for each order and this info is much easier to use and understand.</li>
-  <li> Added the ability to put shipping option in the email header section as well as the email footer section.</li>
-  <li> Added fpdf files -- It turns out there is no license on fpdf, which means it can be included.  This makes installation easier!</li>
-  <li>This version is much easier to install and has many more options that are easily configurable.  Enjoy!</li>
-</ol>
-<p><strong>*****************************<br />
-    V2.0 CHANGELOG<br />
-    *****************************</strong></p>
- <ol> <li>   Implemented PDF packing lists that automatically attach to the email purchase orders. These have customer comments, and only include the products that ship with each purchase order. If the purchase order is a partial shipment, this is indicated on the PDF packing list.</li>
-   <li> Reworked confirm_track.php.  This was badly broken.  I fixed a lot of bugs and cut a lot of code. I also added who the purchase order was sent to. It seems to work fine now.</li>
-   <li> Added a ton of extra information to the send PO page.</li>
-   <li> Emails to customers now include all products shipped regardless of whether or not the shipment was a partial shipment or not. The old one only listed the products if it was a partial shipment</li>
-   <li> Simplified the PO # and Order # system. Now, PO #'s are what used to be Order #-PO #. So for example, if the PO # is 5 and the order # is 10 the new PO# would be 10-5. This way, there is only one number that your subcontractor needs to know, but you have all the information you might need in this number.</li>
-   <li> Changed the tracking input page so that all products are checked by default. The most common scenario is that all products shipped at once, so this is the easiest way to handle this. If not, you can still easily uncheck products.</li>
-   <li> Fixed many problems with the PO resend page.  Basically, I just reused the code for PO sending with a few modifications.  It seems to have fixed all the bugs.</li>
-   <li>  Got rid of duplicate Own stock entry in drop-down menus.</li>
-   <li> Added search capability for Order Numbers in PO Resend page.</li>
-   <li> Fixed problems with incorrect shipping when sending multiple POs at once.</li>
-   <li> Fixed problems with 2nd line of address and company not showing up in addresses.</li>
-   <li> Added the ability to add comments to packing lists and POs.</li>
-   <li> Changed the default behavior so that orders are not listed on the Send PO or Resend PO page if they have been marked &quot;Delivered&quot; in Zen Cart.</li>
-   <li> Added the ability to reinsert &quot;Delivered&quot; products on the Resend PO pages with a checkbox.</li>
-   <li> Added the ability to remove customer comments from packing lists.</li>
-   <li> Changed the default behavior so that when an order is sent to subcontractor, the order is changed from &quot;Pending&quot; to &quot;Processing.&quot;  The customer IS NOT notified when this happens, but they can see this in their account if they log on.  After the first part of the order is sent to a subcontractor, it will no longer do this for future POs.</li>
-   <li> Changed the wording and date format to reflect the changes made and the U.S. date system of MM-DD-YYYY.  The exception was on the Resend PO page, where for logistical reasons, changing the date format would have been more difficult to do.</li>
-   <li> Added a warning about refreshing the page.</li>
-   <li> Changed default number of POs to show on one page to 100.</li>
-   <li> If you split an order in two between two suppliers/drop shippers only the first tracking information was sent to the customer.  This has been fixed.</li>
-   <li> Change mailing addresses to reflect the format used in the United States.</li>
-   <li> Added a way for you to convert one type of shipping to &quot;Cheapest&quot; on the PO.</li>
-   <li> I've probably forgot something!  But, this seems like everything I can remember doing.   :)
-     </p>
-   </li>
-</ol>
-<p><strong>*****************************<br />
-  V1.3B CHANGELOG<br />
-  *****************************</strong></p>
+<h2> Suggested Code Customizations </h2>
 <ol>
-  <li> Incorporated updates and fixes made by Prattski to make this ZenCart v1.3.x compliant. TESTED ON 1.3.8.</li>
-  <li> General code maintenance, moved all necessary information to configuration variables</li>
-  <li> Updated list of available mail template tagnames both in subject and in contents of sent messages</li>
-  <li> Added debug mode for sending POs (admin/includes/extra_configures/purchaseorders DEBUGMODE set to Yes if needed)
-    </p>
-  </li>
+<li>If you do not wish your SCs to be able to see the widgets on the 
+front page of your admin page, make the following change: 
+In admin/index_dashboard.php, right under 
+<pre>
+&lt;!-- header_eof //--&gt;
+</pre> 
+add this code.  In this case, the Suppliers profile id is 6: 
+<pre> 
+&lt;?php  
+// If your userid is in the suppliers table, you have no business here.
+$supplier = false; 
+if (!zen_is_superuser()) { 
+   $recs = $db->Execute("SELECT admin_profile FROM " . TABLE_ADMIN. " WHERE admin_id = " . $_SESSION['admin_id']); 
+   if ($recs-&gt;fields['admin_profile'] == 6) $supplier = true; 
+}
+if (!$supplier) { 
+?&gt;
+</pre>
+
+Then at the bottom of the file, just close the brace. 
+<pre>
+&lt;?php } ?&gt;
+</pre>
+
+</li>
 </ol>
+<hr />
 </body>
 </html>

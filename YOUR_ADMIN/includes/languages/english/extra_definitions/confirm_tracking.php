@@ -29,6 +29,7 @@ define('DELIVER_CARRIER_NAME_TRACKING', 'Carrier name');
 define('TRACKING_NUMBER_TRACKING', 'Tracking number');
 define('DATA_POS_TRACKING', 'PO Date');
 define('TRACKING_ERROR', 'Unable to calculate tracking forms for this PO. Please contact us to resolve this. Thank you.');
+define('TRACKING_INVALID', 'Invalid parameters. Please contact us to resolve this. Thank you.'); // Fire someone who reports this message. 
 define('TRACKING_SAVING', 'Tracking numbers for all items in this PO have already been saved.');
 define('TRACK_SAVE_ERROR', 'In order for any tracking information to be saved, you need to enter at least one tracking number and choose at least one product. Please hit BACK and try again. Thank you.');
 define('TRACKING_CHANGE', 'COPY TO ALL');
@@ -45,5 +46,5 @@ define('SUBCONTRACTOR_TRACKING_THANKYOU', 'Thank you for submitting tracking inf
 define('PO_SENT_TO_NAME', 'P.O. Sent To');
 define('SHOW_OLDEST_PO_FIRST', 'Show Oldest Purchase Orders First');
 define('SHOW_NEWEST_PO_FIRST', 'Show Newest Purchase Orders First');
-
+define('BOX_CUSTOMERS_CONFIRM_TRACKING_SUB', 'Confirm Tracking for Suppliers'); 
 ?>

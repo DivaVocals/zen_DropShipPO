@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS `subcontractors`;
+DROP TABLE IF EXISTS `subcontractors_to_customers`;
 DROP TABLE IF EXISTS `subcontractors_shipping`;
 
 ALTER TABLE `orders_products`
