@@ -344,6 +344,9 @@ function zen_get_products_manufacturers_name($product_id) {
                     $trescik = $tresc_robij1;
                     $manufacturernamed = zen_get_products_manufacturers_name($row9->fields['products_id']);
                     $trescik = str_replace("{manufacturers_name}", $manufacturernamed, $trescik);
+                    if (defined('POSM_MODULE_VERSION')) {
+                       $row9->fields['products_name'] = preg_replace ('/\[.*\]/', '', $row9->fields['products_name']);
+                    }
                     $trescik = str_replace("{products_name}", $row9->fields['products_name'], $trescik);
                     $trescik = str_replace("{products_model}", $row9->fields['products_model'], $trescik);
                     $trescik = str_replace("{final_price}", $row9->fields['final_price'], $trescik);
@@ -397,7 +400,8 @@ function zen_get_products_manufacturers_name($product_id) {
                 $tematk = str_replace("{alias}", $subcontractor->fields['alias'], $tematk);
                 $tematk = str_replace("{order_number}", $wielowymiar[$i][4], $tematk);
                 $tematk = str_replace("{purchase_date}", $wielowymiar[$i][4], $tematk);
-                $tracking_link_1 = '<a href="' . HTTP_SERVER . DIR_WS_ADMIN . 'confirm_track_sub.php?x=' . $dlaemaila . '&y=' . $kod . '">' . HTTP_SERVER . DIR_WS_ADMIN . 'confirm_track_sub.php?x=' . $dlaemaila . '&y=' . $kod . '</a>';
+                // $tracking_link_1 = '<a href="' . HTTP_SERVER . DIR_WS_ADMIN . 'confirm_track_sub.php?aID=' . $dlaemaila . '&oID=' . $kod . '">' . HTTP_SERVER . DIR_WS_ADMIN . 'confirm_track_sub.php?aID=' . $dlaemaila . '&oID=' . $kod . '</a>';
+                $tracking_link_1 = HTTP_SERVER . DIR_WS_ADMIN . 'confirm_track_sub.php?aID=' . $dlaemaila . '&oID=' . $kod; 
 
                 for ($t = 0; $t <= count($tracking_link); $t++) {
                     $tracking_link_good = $tracking_link_good . str_replace("{tracking_link}", $tracking_link_1, $tracking_link[$t]);
@@ -656,6 +660,9 @@ function zen_get_products_manufacturers_name($product_id) {
                         $row3 = $db->Execute("SELECT * FROM " . TABLE_ORDERS . " as o, " . TABLE_ORDERS_PRODUCTS . " as p WHERE o.orders_id = o.orders_id AND o.orders_id=" . (int)$row2->fields['orders_id']);
                         $row100 = $db->Execute("SELECT alias FROM " . TABLE_SUBCONTRACTORS_SHIPPING . " WHERE subcontractors_id=" . (int)$row2->fields['po_sent_to_subcontractor']);
 
+                        if (defined('POSM_MODULE_VERSION')) {
+                            $row2->fields['products_name'] = preg_replace ('/\[.*\]/', '', $row2->fields['products_name']);
+                        }
                         if ($i % 2 == 1) {
 
                             echo "<tr class='dataTableRowSelected'>" .
@@ -831,6 +838,9 @@ function zen_get_products_manufacturers_name($product_id) {
                             $rowpa = $db->Execute("SELECT orders_id, orders_products_id, products_options, products_options_values
                                 FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . "
                                 WHERE orders_products_id=" . $row2->fields['orders_products_id'] . " AND orders_id= "  .$row2->fields['orders_id']);
+                            if (defined('POSM_MODULE_VERSION')) {
+                               $row2->fields['products_name'] = preg_replace ('/\[.*\]/', '', $row2->fields['products_name']);
+                            }
                             $attributes = '';
                             while (!$rowpa->EOF) {
                                 $attributes = $attributes . "<br />" . $rowpa->fields['products_options'] . ": " . $rowpa->fields['products_options_values'];

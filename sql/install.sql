@@ -14,10 +14,10 @@ CREATE TABLE IF NOT EXISTS `subcontractors_shipping` (
   PRIMARY KEY (`subcontractors_id`)
 );
 
-CREATE TABLE IF NOT EXISTS `subcontractors_to_customers` (
+CREATE TABLE IF NOT EXISTS `subcontractors_to_admins` (
   `s2cid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `subcontractors_id` int(10) unsigned NOT NULL, 
-  `customers_id` int(10) unsigned NOT NULL, 
+  `admin_id` int(10) unsigned NOT NULL, 
   PRIMARY KEY (`s2cid`),
   KEY s2c_sub (subcontractors_id)
 );

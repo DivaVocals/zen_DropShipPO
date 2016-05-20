@@ -53,10 +53,10 @@ INSERT IGNORE INTO admin_pages (page_key,language_key,main_page,page_params,menu
 	('configDropShip','BOX_CONFIGURATION_DROPSHIP','FILENAME_CONFIGURATION',CONCAT('gID=',@poid),'configuration','Y',@poid);
 
 
-CREATE TABLE IF NOT EXISTS `subcontractors_to_customers` (
+CREATE TABLE IF NOT EXISTS `subcontractors_to_admins` (
   `s2cid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `subcontractors_id` int(10) unsigned NOT NULL,
-  `customers_id` int(10) unsigned NOT NULL,
+  `admin_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`s2cid`),
   KEY s2c_sub (subcontractors_id)
 );

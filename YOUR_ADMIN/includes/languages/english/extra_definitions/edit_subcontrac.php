@@ -12,6 +12,6 @@ define('TABLE_HEADING_CITY','City');
 define('TABLE_HEADING_STATE','State');
 define('TABLE_HEADING_TELEPHONE','Telephone');
 define('TABLE_CONTACT_PERSON','Contact Person');
-define('TABLE_CUST_ID','Cust ID');
+define('TABLE_ADMIN_ID','Admin ID');
 define('TABLE_HEADING_ACTION',' ');
 ?>

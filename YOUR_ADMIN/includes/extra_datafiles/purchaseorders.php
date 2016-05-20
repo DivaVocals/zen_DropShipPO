@@ -20,5 +20,5 @@
 //  $Id: music_type_database_names.php 290 2004-09-15 19:48:26Z wilt $
 //
 define('TABLE_SUBCONTRACTORS', DB_PREFIX . 'subcontractors');
-define('TABLE_SUBCONTRACTORS_TO_CUSTOMERS', DB_PREFIX . 'subcontractors_to_customers');
+define('TABLE_SUBCONTRACTORS_TO_ADMINS', DB_PREFIX . 'subcontractors_to_admins');
 ?>

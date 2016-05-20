@@ -36,6 +36,9 @@ require(DIR_FS_CATALOG . 'includes/filenames.php');
     <link rel="stylesheet" type="text/css" href="includes/style_tracking.css">
 </head>
 <body onload="init()">
+<!-- header //-->
+<?php require(DIR_WS_INCLUDES . 'header.php'); ?>
+<!-- header_eof //-->
 <?php
 if ($_POST['save'] == 'save')
 {
@@ -111,6 +114,9 @@ The following items have shipped:
 
                 }
 
+                if (defined('POSM_MODULE_VERSION')) {
+                    $row6->fields['products_name'] = preg_replace ('/\[.*\]/', '', $row6->fields['products_name']);
+                }
                 $comments = $comments . $row6c->fields['products_quantity'] . " " . $row6c->fields['products_name'] . $znacznik;
 
             }
@@ -124,7 +130,7 @@ The following items have shipped:
 
             }
 
-            $query44 = $db->Execute("SELECT date_purchased, customers_name, customers_email_address, orders_status FROM " . TABLE_ORDERS . " WHERE orders_id='$orders_id'");
+            $row44 = $db->Execute("SELECT date_purchased, customers_name, customers_email_address, orders_status FROM " . TABLE_ORDERS . " WHERE orders_id='$orders_id'");
 
 
             $row55 = $db->Execute("SELECT orders_status_name, orders_status_id FROM " . TABLE_ORDERS_STATUS . " WHERE orders_status_id='$status'");
@@ -205,16 +211,15 @@ The following items have shipped:
     }
 }
 else{
-$x = (int)$_GET[x];
-$y = (int)$_GET[y];
+$aID = (int)$_GET['aID'];
+$oID = (int)$_GET['oID'];
 
-// X is sub id.
 // If you're not a superuser, you should be logged in as this id.
 if (!zen_is_superuser()) { 
-   $recs = $db->Execute("SELECT subcontractors_id FROM " . TABLE_SUBCONTRACTORS_TO_CUSTOMERS . " WHERE customers_id = " . $_SESSION['admin_id']); 
+   $recs = $db->Execute("SELECT subcontractors_id FROM " . TABLE_SUBCONTRACTORS_TO_ADMINS . " WHERE admin_id = " . $_SESSION['admin_id']); 
    $found = false; 
    while (!$recs->EOF) { 
-        if ($recs->fields['subcontractors_id'] == $x) { 
+        if ($recs->fields['subcontractors_id'] == $aID) { 
            $found = true; break;
         }
         $recs->MoveNext(); 
@@ -226,10 +231,10 @@ if (!zen_is_superuser()) {
 }
 
 //funkcja sprawdzajaca czy istnieje taki numer po i subkontraktor przyporzadkowany temu numerowi
-function ilosc($y, $x)
+function ilosc($oID, $aID)
 {
     global $db;
-    $result = $db->Execute("SELECT po_number FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$x' AND po_number='$y' AND item_shipped=0");
+    $result = $db->Execute("SELECT po_number FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$aID' AND po_number='$oID' AND item_shipped=0");
 
     if (!$result->EOF) {
         return 1;
@@ -239,11 +244,11 @@ function ilosc($y, $x)
 }
 
 //funkcja oblsugujaca blad jezeli nic nie znajdzie
-function error($y, $x)
+function error($oID, $aID)
 {
     global $db;
     $result = $db->Execute("SELECT po_number
-         FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$x' AND po_number='$y'");
+         FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$aID' AND po_number='$oID'");
 
     if (!$result->EOF) {
         return 1;
@@ -253,14 +258,14 @@ function error($y, $x)
 }
 
 //funkcja sprawdzajaca czy wszystkie dane zostaly juz zapisane jesli nie to pozwala na zapisanie trackingu
-function save($y, $x)
+function save($oID, $aID)
 {
     global $db;
     $query110a = $db->Execute("SELECT po_number
-         FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$x' AND po_number='$y'");
+         FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$aID' AND po_number='$oID'");
 
     $query110b = $db->Execute("SELECT po_number
-         FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$x' AND po_number='$y' AND item_shipped=1");
+         FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$aID' AND po_number='$oID' AND item_shipped=1");
 
     if ($query110a->RecordCount() == $query110b->RecordCount()) {
         return 0;
@@ -271,17 +276,17 @@ function save($y, $x)
 
 
 //jezeli funckja ilosc() zwroci jedynke to bedzie wykonywany ponizszy kod
-if (error($y, $x) == 0) {
+if (error($oID, $aID) == 0) {
     echo "<font class='tekst'>" . TRACKING_ERROR . "</font>";;
 } else {
-    if (save($y, $x) == 0) {
+    if (save($oID, $aID) == 0) {
         echo "<font class='tekst'>" . TRACKING_SAVING . "</font>";;
     }
 }
 
-if (error($y, $x) == 1 AND save($y, $x) == 1)
+if (error($oID, $aID) == 1 AND save($oID, $aID) == 1)
 {
-if (ilosc($y, $x))
+if (ilosc($oID, $aID))
 {
 echo "<form name='save1' method='POST' action='confirm_track_sub.php'>"; 
 
@@ -306,7 +311,7 @@ $i = 0;
                 <?php
 
                 $row2 = $db->Execute("SELECT po_number, po_sent_to_subcontractor, item_shipped, orders_id, po_date
-            FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$x' AND po_number='$y' AND item_shipped=0");
+            FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$aID' AND po_number='$oID' AND item_shipped=0");
 
                 $row3 = $db->Execute("SELECT delivery_name, delivery_company, delivery_street_address, delivery_city, delivery_postcode,
             delivery_state, delivery_country, delivery_suburb
@@ -382,10 +387,12 @@ $i = 0;
 
                 <?php
                 $row5 = $db->Execute("SELECT orders_id, products_name, orders_products_id
-            FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$x' AND po_number='$y' AND item_shipped=0");
+            FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$aID' AND po_number='$oID' AND item_shipped=0");
                 $i = 0;
                 while (!$row5->EOF) {
-
+                     if (defined('POSM_MODULE_VERSION')) {
+                        $row5->fields['products_name'] = preg_replace ('/\[.*\]/', '', $row5->fields['products_name']);
+                     }
                     $row6 = $db->Execute("SELECT orders_id, orders_products_id, products_options, products_options_values
                                          FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . "
                                          WHERE orders_products_id='" . $row5->fields['orders_products_id'] ."' AND orders_id='" . $row5->fields['orders_id']. "'");
@@ -411,8 +418,8 @@ $i = 0;
                     $row5->MoveNext();
                 }
                 echo "<input type='hidden' name='ile' value='$i'>";
-                echo "<input type='hidden' name='x' value='$x'>";
-                echo "<input type='hidden' name='y' value='$y'>";
+                echo "<input type='hidden' name='x' value='$aID'>";
+                echo "<input type='hidden' name='y' value='$oID'>";
                 echo "<input type='hidden' name='save' value='save'>";
                 ?>
                 <tr>
