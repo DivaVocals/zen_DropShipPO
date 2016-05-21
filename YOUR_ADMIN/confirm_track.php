@@ -124,7 +124,7 @@ require(DIR_WS_CLASSES . 'currencies.php');
                             echo "<tr class='dataTableRow'>";
                 ?>
                                 <td align="center" valign="center">
-                                  <?php  echo "<a href='".HTTP_SERVER.DIR_WS_ADMIN."confirm_track_sub.php?x=".$row->fields['po_sent_to_subcontractor']."&y=".$row->fields['po_number']."' target='_blank'>".$row->fields['orders_id']."-".$row->fields['po_number']."</a>"; ?>
+                                  <?php  echo "<a href='".HTTP_SERVER.DIR_WS_ADMIN."confirm_track_sub.php?aID=".$row->fields['po_sent_to_subcontractor']."&oID=".$row->fields['po_number']."' target='_blank'>".$row->fields['orders_id']."-".$row->fields['po_number']."</a>"; ?>
                                 </td>
                              <td align="center" valign="center">
                                   <?php  echo $row->fields['po_date']; ?>
