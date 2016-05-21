@@ -393,13 +393,13 @@ $i = 0;
                      if (defined('POSM_MODULE_VERSION')) {
                         $row5->fields['products_name'] = preg_replace ('/\[.*\]/', '', $row5->fields['products_name']);
                      }
-                    $row6 = $db->Execute("SELECT orders_id, orders_products_id, products_options, products_options_values
+                    $row6 = $db->Execute("SELECT orders_id, orders_products_id, products_options, products_options_values  
                                          FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . "
                                          WHERE orders_products_id='" . $row5->fields['orders_products_id'] ."' AND orders_id='" . $row5->fields['orders_id']. "'");
 
                     $attributes = '';
                     while (!$row6->EOF) {
-                        $attributes = $attributes . $row6->fields['products_options'] . ": " . $row6_fields['products_options_id'] . "<br>";
+                        $attributes = $attributes . $row6->fields['products_options'] . ": " . $row6->fields['products_options_values'] . "<br>";
                         $row6->MoveNext();
                     }
 

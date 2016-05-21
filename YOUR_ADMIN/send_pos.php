@@ -356,7 +356,7 @@ function zen_get_products_manufacturers_name($product_id) {
                         WHERE orders_products_id='$tm' AND orders_id='$tm1'");
                     $attributes = '';
                     while (!$row9a->EOF) {
-                        $attributes = $attributes . $row9a->fieldsa['products_options'] . ": " . $row9a->fieldsa['products_options_values'] . "\n";
+                        $attributes = $attributes . $row9a->fields['products_options'] . ": " . $row9a->fields['products_options_values'] . "\n";
                         $row9a->MoveNext();
                     }
 
