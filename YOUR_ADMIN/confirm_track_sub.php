@@ -116,6 +116,7 @@ The following items have shipped:
 
                 if (defined('POSM_MODULE_VERSION')) {
                     $row6->fields['products_name'] = preg_replace ('/\[.*\]/', '', $row6->fields['products_name']);
+                    $row6c->fields['products_name'] = preg_replace ('/\[.*\]/', '', $row6c->fields['products_name']);
                 }
                 $comments = $comments . $row6c->fields['products_quantity'] . " " . $row6c->fields['products_name'] . $znacznik;
 
@@ -386,7 +387,7 @@ $i = 0;
                 </tr>
 
                 <?php
-                $row5 = $db->Execute("SELECT orders_id, products_name, orders_products_id
+                $row5 = $db->Execute("SELECT orders_id, products_name, products_model, orders_products_id
             FROM " . TABLE_ORDERS_PRODUCTS . " WHERE po_sent_to_subcontractor='$aID' AND po_number='$oID' AND item_shipped=0");
                 $i = 0;
                 while (!$row5->EOF) {
@@ -403,14 +404,21 @@ $i = 0;
                         $row6->MoveNext();
                     }
 
-
+                    if (!empty($row5->fields['products_model'])) { 
+                       $model = "(" . $row5->fields['products_model'] . ")";
+                    }
                     ?>
                     <tr>
                         <td align="center" class='td' valign='top'><input type='checkbox'
                                                                           name='<?php echo "orders_products_id_" . $i ?>'
                                                                           value='<?php echo $row5->fields['orders_products_id']; ?>' CHECKED></td>
-                        <td class='td_zakonczenie'><font
-                                class='tekst'><?php echo $row5->fields['products_name'] . "<br>" . $attributes; ?></font></td>
+                        <td class='td_zakonczenie'>
+                        <font class='tekst'>
+<?php 
+   echo $model . "<br />"; 
+   echo $row5->fields['products_name'] . "<br />" . $attributes; 
+?>
+                    </font></td>
                     </tr>
                     <?php
                     echo "<input type='hidden' name='orders_id_$i' value='" . $row5->fields['orders_id']. "'>";

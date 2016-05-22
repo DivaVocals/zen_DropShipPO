@@ -20,6 +20,7 @@
 //
 require('includes/application_top.php');
 require(DIR_WS_CLASSES . 'currencies.php');
+$currencies = new currencies();
 define('FPDF_FONTPATH', 'includes/classes/fpdf/font/');
 require('pdfpack.php');
 
@@ -222,6 +223,8 @@ function zen_get_products_manufacturers_name($product_id) {
                 $zawartosc2[$i] = str_replace("{customers_email}", $row4->fields['customers_email_address'], "$zawartosc2[$i]");
                 $zawartosc2[$i] = str_replace("{delivery_name}", $row4->fields['delivery_name'], "$zawartosc2[$i]");
                 $zawartosc2[$i] = str_replace("{po_comments}", $_POST[posubcomments], "$zawartosc2[$i]");
+                $zawartosc2[$i] = str_replace("{delivery_phone}", $row4->fields['customers_telephone'], "$zawartosc2[$i]");
+                $zawartosc2[$i] = str_replace("{delivery_email}", $row4->fields['customers_email_address'], "$zawartosc2[$i]");
                 $oatmeal = $db->Execute("select comments from " . TABLE_ORDERS_STATUS_HISTORY . " WHERE orders_id = '" . zen_db_input($row4->fields[orders_id]) . "' order by date_added");
                 $catmeow = nl2br(zen_db_output($oatmeal->fields['comments']));
                 $catmeow = strip_tags($catmeow);
@@ -337,6 +340,7 @@ function zen_get_products_manufacturers_name($product_id) {
                 $pdf->addLineFormat($cols);
                 $y = 89;
                 $countproductsonpo = 0;
+                $total_items = 0; $total_price = 0;  
                 for ($h = 0; $h < count($tmpt); $h++) {
                     $tm = $tmpt[$h][2];
                     $tm1 = $tmpt[$h][4];
@@ -347,10 +351,13 @@ function zen_get_products_manufacturers_name($product_id) {
                     if (defined('POSM_MODULE_VERSION')) {
                        $row9->fields['products_name'] = preg_replace ('/\[.*\]/', '', $row9->fields['products_name']);
                     }
+                    $trescik = str_replace("{item_number}", $h+1, $trescik);
                     $trescik = str_replace("{products_name}", $row9->fields['products_name'], $trescik);
                     $trescik = str_replace("{products_model}", $row9->fields['products_model'], $trescik);
                     $trescik = str_replace("{final_price}", $row9->fields['final_price'], $trescik);
                     $trescik = str_replace("{products_quantity}", $row9->fields['products_quantity'], $trescik);
+                    $total_items += $row9->fields['products_quantity']; 
+                    $total_price += ($row9->fields['final_price'] * $row9->fields['products_quantity']); 
                     $row9a = $db->Execute("SELECT orders_id, orders_products_id, products_options, products_options_values
                         FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . "
                         WHERE orders_products_id='$tm' AND orders_id='$tm1'");
@@ -400,6 +407,8 @@ function zen_get_products_manufacturers_name($product_id) {
                 $tematk = str_replace("{alias}", $subcontractor->fields['alias'], $tematk);
                 $tematk = str_replace("{order_number}", $wielowymiar[$i][4], $tematk);
                 $tematk = str_replace("{purchase_date}", $wielowymiar[$i][4], $tematk);
+
+
                 // $tracking_link_1 = '<a href="' . HTTP_SERVER . DIR_WS_ADMIN . 'confirm_track_sub.php?aID=' . $dlaemaila . '&oID=' . $kod . '">' . HTTP_SERVER . DIR_WS_ADMIN . 'confirm_track_sub.php?aID=' . $dlaemaila . '&oID=' . $kod . '</a>';
                 $tracking_link_1 = HTTP_SERVER . DIR_WS_ADMIN . 'confirm_track_sub.php?aID=' . $dlaemaila . '&oID=' . $kod; 
 
@@ -424,6 +433,17 @@ function zen_get_products_manufacturers_name($product_id) {
                 } else {
                     $newzawartosc = str_replace("{shipping_method}", PO_CHANGE_SHIPPING_TO, $newzawartosc);
                 }
+                $newzawartosc = str_replace("{po_manager}", PO_FROM_EMAIL_NAME, $newzawartosc);
+                $newzawartosc = str_replace("{store_name}", STORE_NAME, $newzawartosc);
+                $newzawartosc = str_replace("{store_phone}", STORE_TELEPHONE_CUSTSERVICE, $newzawartosc);
+                $newzawartosc = str_replace("{store_url}", HTTP_CATALOG_SERVER . DIR_WS_CATALOG, $newzawartosc);
+                $newzawartosc = str_replace("{po_number}", $wielowymiar[$i][4] . "-" . $kod, $newzawartosc);
+                // $today_date = date('Y-m-d');
+                $today_date = date('Y-m-d h:i:s A');
+                $newzawartosc = str_replace("{date}", $today_date, $newzawartosc);
+                $newzawartosc = str_replace("{total_items}", $total_items, $newzawartosc);
+                $newzawartosc = str_replace("{total_price}", $currencies->format($total_price), $newzawartosc);
+                $newzawartosc = str_replace("{customers_comments}", $oatmeal->fields['comments'], $newzawartosc);
                 $passitw = $wielowymiar[$i][4];
                 $row978 = $db->Execute("SELECT orders_status FROM " . TABLE_ORDERS . " WHERE orders_id='$passitw'");
                 if ($row978->fields['orders_status'] == 1) {
