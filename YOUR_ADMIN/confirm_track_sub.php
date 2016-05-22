@@ -150,7 +150,8 @@ The following items have shipped:
                 $notify_comments = '';
 
                 if ($comments != '') {
-                    $notify_comments = EMAIL_TEXT_COMMENTS_UPDATE . $comments . "\n\n";
+                    // $notify_comments = EMAIL_TEXT_COMMENTS_UPDATE . $comments . "\n\n";
+                    $notify_comments = $comments . "\n\n";
                     $order_comment = $comments;
                 }
                 if ($tracka_id1 != '') {
@@ -175,8 +176,7 @@ The following items have shipped:
                     $notify_comments .
                     EMAIL_TEXT_STATUS_UPDATED . sprintf(EMAIL_TEXT_STATUS_LABEL, $row55->fields['orders_status_name']) .
                     EMAIL_TEXT_STATUS_PLEASE_REPLY;
-                $html_msg['EMAIL_MESSAGE_HTML'] = str_replace('
-   ', '<br />', $message);
+                $html_msg['EMAIL_MESSAGE_HTML'] = nl2br($message); 
                 // REMOVE THE TAGS FOR TEXT EMAIL
                 $message = strip_tags($message);
 
