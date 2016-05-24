@@ -83,7 +83,7 @@ if ($_POST['save'] == 'save')
 //generowanie komentarza oraz statusu zamowienia gdy tracking jest kompletny
             if (sprawdz($orders_id, count($orders_products_id)) == 1) {
                 $order_shipping_complete = 1;
-                $status = 3;
+                $status = POST_SET_FULL_TRACKING_STATUS;
                 $comments = PO_FULLSHIP_COMMENTS . "
 
 The following items have shipped:
@@ -94,7 +94,7 @@ The following items have shipped:
 
             if (sprawdz($orders_id, count($orders_products_id)) == 0) {
                 $order_shipping_complete = 0;
-                $status = 2;
+                $status = POST_SET_PARTIAL_TRACKING_STATUS; 
                 $comments = PO_PARTIALSHIP_COMMENTS . "
 
 The following items have shipped:
@@ -196,12 +196,12 @@ The following items have shipped:
             $db->Execute("INSERT INTO " . TABLE_ORDERS_STATUS_HISTORY . "
             (orders_status_id, orders_id, date_added,
                 customer_notified, track_id1, track_id2, track_id3, track_id4, track_id5,comments)
-               values ('$status','$orders_id',now(),'1','$tracka_id1',
+               VALUES ('$status','$orders_id',now(),'1','$tracka_id1',
               '$tracka_id2','$tracka_id3','$tracka_id4','$tracka_id5','$comments')");
 
             if ($order_shipping_complete == 1) {
-                $db->Execute("update " . TABLE_ORDERS . "
-                        set orders_status = '" . $status . "', last_modified = now() where orders_id ='$orders_id'");
+                $db->Execute("UPDATE " . TABLE_ORDERS . "
+                        SET orders_status = '" . $status . "', last_modified = now() WHERE orders_id ='$orders_id'");
             }
             echo "<font class='tekst'>" . SUBCONTRACTOR_TRACKING_THANKYOU . "</font>";;
 
