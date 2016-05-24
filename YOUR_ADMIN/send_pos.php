@@ -226,7 +226,6 @@ function zen_get_products_manufacturers_name($product_id) {
                 $content2[$i] = str_replace("{delivery_name}", $row4->fields['delivery_name'], "$content2[$i]");
                 $content2[$i] = str_replace("{po_comments}", $_POST['posubcomments'], "$content2[$i]");
                 $content2[$i] = str_replace("{delivery_phone}", $row4->fields['customers_telephone'], "$content2[$i]");
-                $content2[$i] = str_replace("{delivery_email}", $row4->fields['customers_email_address'], "$content2[$i]");
                 $oatmeal = $db->Execute("select comments from " . TABLE_ORDERS_STATUS_HISTORY . " WHERE orders_id = '" . zen_db_input($row4->fields[orders_id]) . "' order by date_added");
                 $catmeow = nl2br(zen_db_output($oatmeal->fields['comments']));
                 $catmeow = strip_tags($catmeow);
@@ -431,7 +430,7 @@ function zen_get_products_manufacturers_name($product_id) {
                 $newcontent = str_replace("{zip}", $subcontractor->fields['zip'], $newcontent);
                 $newcontent = str_replace("{telephone}", $subcontractor->fields['telephone'], $newcontent);
                 $newcontent = str_replace("{email_address}", $subcontractor->fields['email_address'], $newcontent);
-                $newcontent = str_replace("{delivery_email}", $row4->fields['customers_email_address'], "$newcontent");
+                $newcontent = str_replace("{customers_email}", $row4->fields['customers_email_address'], "$newcontent");
                 if ($tmpt[0][7] != PO_CHANGE_SHIPPING_FROM) {
 
                     $newcontent = str_replace("{shipping_method}", $tmpt[0][7], $newcontent);
@@ -850,7 +849,7 @@ function zen_get_products_manufacturers_name($product_id) {
                         $skrypt = "send_pos.php?";
 
 
-                        $count_query = "SELECT p.orders_products_id, p.orders_id, p.orders_products_id, p.products_name, p.products_id, o.shipping_method, o.delivery_state, p.products_quantity, o.delivery_street_address, o.delivery_city, o.delivery_suburb, o.delivery_postcode, o.delivery_country, o.delivery_company, o.delivery_name, p.products_model FROM " . TABLE_ORDERS_PRODUCTS . " as p, " . TABLE_ORDERS . " as o WHERE  p.orders_id=o.orders_id AND po_sent='0' AND o.orders_status != 3 AND po_number  IS NULL";
+                        $count_query = "SELECT p.orders_products_id, p.orders_id, p.orders_products_id, p.products_name, p.products_id, o.shipping_method, o.delivery_state, p.products_quantity, o.delivery_street_address, o.delivery_city, o.delivery_suburb, o.delivery_postcode, o.delivery_country, o.delivery_company, o.delivery_name, p.products_model FROM " . TABLE_ORDERS_PRODUCTS . " as p, " . TABLE_ORDERS . " as o WHERE  p.orders_id=o.orders_id AND po_sent='0' AND " . PO_STATUS_FILTER . " AND po_number  IS NULL";
                         $queryxx = $db->Execute($count_query); 
 
                         $l_odp = $queryxx->RecordCount();

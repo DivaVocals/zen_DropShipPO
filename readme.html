@@ -70,7 +70,46 @@ Then at the bottom of the file, just close the brace.
 
 <h2> Optional Code Customizations </h2>
 <ol>
+<li>When the PO is sent using Customers-&gt;Send/Resend Purchase Orders,
+the order status is changed if it is the default value of 1 (New Order).
+By default it is set to 2, but you may customize this value by setting 
+<pre>
+POST_SEND_ORDER_STATUS
+</pre>
+in the file 
+<pre>
+YOUR_ADMIN/includes/extra_configures/send_pos.php
+</pre>
+</li>
+<li>When the PO has tracking information added by the Supplier, who 
+runs the confirm_track_sub.php script, 
+the order status is changed. 
+By default it is set to 2 for a full ship and 3 for a partial ship, but you may customize this value by setting 
+the values 
+<pre>
+POST_SET_PARTIAL_TRACKING_STATUS
+POST_SET_FULL_TRACKING_STATUS
+</pre>
+in the file 
+<pre>
+YOUR_ADMIN/includes/extra_configures/send_pos.php
+</pre>
+</li>
 <li>
+By default, Send/Resend POs will only show orders where status != 3.
+You can change this if you wish.  For example, if you wish to only see 
+orders where status = 1 on this screen, modify 
+<pre>
+YOUR_ADMIN/includes/extra_configures/send_pos.php
+</pre>
+and change the PO_STATUS_FILTER setting to 
+<pre>
+define('PO_STATUS_FILTER', ' o.orders_status = 1 '); 
+</pre>
+</li>
+</ol>
+
+<h2> Email Customizations </h2>
 The email template used when Customers-&gt;Send/Resend Purchase Orders
 is invoked is in three parts: 
 <pre>
@@ -117,7 +156,6 @@ Possible customizations are as follows:
 {customers_adres} - Customer's Address
 {customers_phone} - Customer's Phone Number
 {customers_email} - Customer's Email Address
-{delivery_email} - Customer's Email Address (duplicate)
 {delivery_name} - Name of Person for Shipping
 {po_comments} - Comments you enter on Send PO page for the PO
 {customers_comments} - The customer's order comments
@@ -151,41 +189,8 @@ Possible customizations are as follows:
 {customers_comments} - Comments Made when the Order was Placed
 {total_items} - Total of all qty
 {total_price} - Total of all final_price * qty 
+{customers_email} - Customer's Email Address
 </pre>
-</li>
-</ol>
-<!-- FIXME
-<li>The filename of the PDF created by 
-Customers-&gt;Send/Resend Purchase Orders may be changed 
-
-</li>
--->`
-<li>When the PO is sent using Customers-&gt;Send/Resend Purchase Orders,
-the order status is changed if it is the default value of 1 (New Order).
-By default it is set to 2, but you may customize this value by setting 
-<pre>
-POST_SEND_ORDER_STATUS
-</pre>
-in the file 
-<pre>
-YOUR_ADMIN/includes/extra_configures/send_pos.php
-</pre>
-</li>
-<li>When the PO has tracking information added by the Supplier, who 
-runs the confirm_track_sub.php script, 
-the order status is changed. 
-By default it is set to 2 for a full ship and 3 for a partial ship, but you may customize this value by setting 
-the values 
-<pre>
-POST_SET_PARTIAL_TRACKING_STATUS
-POST_SET_FULL_TRACKING_STATUS
-</pre>
-in the file 
-<pre>
-YOUR_ADMIN/includes/extra_configures/send_pos.php
-</pre>
-
-</ol>
 </li>
 </ol>
 
