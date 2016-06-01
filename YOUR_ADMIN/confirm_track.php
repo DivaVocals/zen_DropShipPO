@@ -111,6 +111,9 @@ require(DIR_WS_CLASSES . 'currencies.php');
                 for($h=0; $h<count($wyjscie); $h++)
                 {
                          $row = $db->Execute("SELECT orders_id, po_number, po_date, po_sent_to_subcontractor FROM ".TABLE_ORDERS_PRODUCTS." WHERE po_sent=1 AND item_shipped=0 AND po_number='$wyjscie[$h]'");
+                         if ($row->EOF) { 
+                            continue; 
+                         }
                          $i=0;
                          $row1=$db->Execute("SELECT delivery_name, delivery_company, delivery_street_address, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_suburb FROM ".TABLE_ORDERS." WHERE orders_id= " . (int) $row->fields['orders_id']);
 
@@ -121,7 +124,7 @@ require(DIR_WS_CLASSES . 'currencies.php');
                             echo "<tr class='dataTableRow'>";
                 ?>
                                 <td align="center" valign="center">
-                                  <?php  echo "<a href='".HTTP_SERVER.DIR_WS_ADMIN."confirm_track_sub.php?x=".$row->fields['po_sent_to_subcontractor']."&y=".$row->fields['po_number']."' target='_blank'>".$row->fields['orders_id']."-".$row->fields['po_number']."</a>"; ?>
+                                  <?php  echo "<a href='".HTTP_SERVER.DIR_WS_ADMIN."confirm_track_sub.php?aID=".$row->fields['po_sent_to_subcontractor']."&oID=".$row->fields['po_number']."' target='_blank'>".$row->fields['orders_id']."-".$row->fields['po_number']."</a>"; ?>
                                 </td>
                              <td align="center" valign="center">
                                   <?php  echo $row->fields['po_date']; ?>

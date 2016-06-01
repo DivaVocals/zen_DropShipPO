@@ -24,3 +24,12 @@ email/email_products.txt
 
 3. Copy all files in YOUR_ADMIN and email to your cart 
 
+Optional Changes:
+1. To see the tracking information when viewing an order, you must install
+the Ty Tracker changes to admin/orders.php. 
+2. For your customers to see the tracking information on the catalog side 
+you must install the Ty Tracker changes to 
+includes/templates/YOUR_TEMPLATE/templates/tpl_account_history_info_default.php
+includes/modules/pages/account_history_info/header_php.php
+includes/languages/english/YOUR_TEMPLATE/account_history_info.php
+

@@ -20,8 +20,11 @@
 //
 require('includes/application_top.php');
 require(DIR_WS_CLASSES . 'currencies.php');
+$currencies = new currencies();
 define('FPDF_FONTPATH', 'includes/classes/fpdf/font/');
 require('pdfpack.php');
+// define('INDENT', '&nbsp;&nbsp;&nbsp;'); 
+define('INDENT', ''); // until I figure out how to strip html for pdf.
 
 //load email templates
 @ $wp1 = fopen("../email/email_dropship_po_header.txt", 'r');
@@ -138,7 +141,7 @@ function zen_get_products_manufacturers_name($product_id) {
 
             fclose($wp1);
             for ($i = 0; $i < count($zamowienie); $i++) {
-                $zawartosc = $zawartosc . $zamowienie[$i];
+                $content = $content . $zamowienie[$i];
             }
         }
 
@@ -213,41 +216,42 @@ function zen_get_products_manufacturers_name($product_id) {
                 else
                     $address_billing .= $row4->fields['billing_street_address'] . "\n" . $row4->fields['billing_city'] . ", " . $row4->fields['billing_state'] . " " . $row4->fields['billing_postcode'] . "\n" . $row4->fields['billing_country'];
                 $price = $row4->fields['final_price'] . ' ' . $row4->fields['date_purchased'];
-                $zawartosc2 = array();
+                $content2 = array();
                 //podmiana tagow dla pliku header
-                $zawartosc2[$i] = str_replace("{customers_name}", $row4->fields['customers_name'], $zawartosc);
-                $zawartosc2[$i] = str_replace("{order_number}", $row4->fields['orders_id'], "$zawartosc2[$i]");
-                $zawartosc2[$i] = str_replace("{customers_address}", $address, "$zawartosc2[$i]");
-                $zawartosc2[$i] = str_replace("{customers_phone}", $row4->fields['customers_telephone'], "$zawartosc2[$i]");
-                $zawartosc2[$i] = str_replace("{customers_email}", $row4->fields['customers_email_address'], "$zawartosc2[$i]");
-                $zawartosc2[$i] = str_replace("{delivery_name}", $row4->fields['delivery_name'], "$zawartosc2[$i]");
-                $zawartosc2[$i] = str_replace("{po_comments}", $_POST[posubcomments], "$zawartosc2[$i]");
+                $content2[$i] = str_replace("{customers_name}", $row4->fields['customers_name'], $content);
+                $content2[$i] = str_replace("{order_number}", $row4->fields['orders_id'], "$content2[$i]");
+                $content2[$i] = str_replace("{customers_address}", $address, "$content2[$i]");
+                $content2[$i] = str_replace("{customers_phone}", $row4->fields['customers_telephone'], "$content2[$i]");
+                $content2[$i] = str_replace("{customers_email}", $row4->fields['customers_email_address'], "$content2[$i]");
+                $content2[$i] = str_replace("{delivery_name}", $row4->fields['delivery_name'], "$content2[$i]");
+                $content2[$i] = str_replace("{po_comments}", $_POST['posubcomments'], "$content2[$i]");
+                $content2[$i] = str_replace("{delivery_phone}", $row4->fields['customers_telephone'], "$content2[$i]");
                 $oatmeal = $db->Execute("select comments from " . TABLE_ORDERS_STATUS_HISTORY . " WHERE orders_id = '" . zen_db_input($row4->fields[orders_id]) . "' order by date_added");
                 $catmeow = nl2br(zen_db_output($oatmeal->fields['comments']));
                 $catmeow = strip_tags($catmeow);
-                $zawartosc2[$i] = str_replace("{customers_comments}", $catmeow, "$zawartosc2[$i]");
+                $content2[$i] = str_replace("{customers_comments}", $catmeow, "$content2[$i]");
                 if ($row4->fields['delivery_company'] != '') {
-                    $zawartosc2[$i] = str_replace("{delivery_company}", $row4->fields['delivery_company'], "$zawartosc2[$i]");
+                    $content2[$i] = str_replace("{delivery_company}", $row4->fields['delivery_company'], "$content2[$i]");
                 } else {
-                    $zawartosc2[$i] = str_replace("{delivery_company}", '-', "$zawartosc2[$i]");
+                    $content2[$i] = str_replace("{delivery_company}", '-', "$content2[$i]");
                 }
 
-                $zawartosc2[$i] = str_replace("{delivery_address}", $address_deliver, "$zawartosc2[$i]");
+                $content2[$i] = str_replace("{delivery_address}", $address_deliver, "$content2[$i]");
 
                 if ($row4->fields['billing_company'] != '') {
-                    $zawartosc2[$i] = str_replace("{billing_company}", $row4->fields['billing_company'], "$zawartosc2[$i]");
+                    $content2[$i] = str_replace("{billing_company}", $row4->fields['billing_company'], "$content2[$i]");
                 } else {
-                    $zawartosc2[$i] = str_replace("{billing_company}", '-', "$zawartosc2[$i]");
+                    $content2[$i] = str_replace("{billing_company}", '-', "$content2[$i]");
                 }
 
-                $zawartosc2[$i] = str_replace("{billing_name}", $row4->fields['billing_name'], "$zawartosc2[$i]");
-                $zawartosc2[$i] = str_replace("{billing_address}", $address_billing, "$zawartosc2[$i]");
-                $zawartosc2[$i] = str_replace("{payment_method}", $row4->fields['payment_method'], "$zawartosc2[$i]");
-                $zawartosc2[$i] = str_replace("{date_purchased}", $row4->fields['date_purchased'], "$zawartosc2[$i]");
+                $content2[$i] = str_replace("{billing_name}", $row4->fields['billing_name'], "$content2[$i]");
+                $content2[$i] = str_replace("{billing_address}", $address_billing, "$content2[$i]");
+                $content2[$i] = str_replace("{payment_method}", $row4->fields['payment_method'], "$content2[$i]");
+                $content2[$i] = str_replace("{date_purchased}", $row4->fields['date_purchased'], "$content2[$i]");
                 if ($row4->fields['shipping_method'] != PO_CHANGE_SHIPPING_FROM) {
-                    $zawartosc2[$i] = str_replace("{shipping_method}", $row4->fields['shipping_method'], "$zawartosc2[$i]");
+                    $content2[$i] = str_replace("{shipping_method}", $row4->fields['shipping_method'], "$content2[$i]");
                 } else {
-                    $zawartosc2[$i] = str_replace("{shipping_method}", PO_CHANGE_SHIPPING_TO, "$zawartosc2[$i]");
+                    $content2[$i] = str_replace("{shipping_method}", PO_CHANGE_SHIPPING_TO, "$content2[$i]");
                 }
 
                 //ustawianie odpowiednich zmiennych do posortowania w celu uzyskania odpowiedneij ilosci numerow po
@@ -256,7 +260,7 @@ function zen_get_products_manufacturers_name($product_id) {
                 $wielowymiar[$i][0] = $subk[$i]; //id_subcontractors
                 $wielowymiar[$i][1] = $row4->fields['customers_id']; //id_customers
                 $wielowymiar[$i][2] = $idk[$i]; //id_produktu zamowionego
-                $wielowymiar[$i][3] = $zawartosc2[$i]; //zawartosc
+                $wielowymiar[$i][3] = $content2[$i]; //zawartosc
                 $wielowymiar[$i][4] = $row4->fields['orders_id']; //id_orders
                 $wielowymiar[$i][5] = $row4->fields['delivery_name'] . "\n" . $address_deliver;
                 $wielowymiar[$i][6] = $row4->fields['billing_name'] . "\n" . $address_billing;
@@ -298,9 +302,9 @@ function zen_get_products_manufacturers_name($product_id) {
                     }
                 }
 
-                $tresc_ostateczna = '';
-                $trescik = '';
-                $newzawartosc = '';
+                $contents_final = '';
+                $product_info = '';
+                $newcontent = '';
 
                 //wybieranie dpowiedniego produktu i dodanie go do szablonu e-mail
                 //odpowiednie tagi zpliku email_products sa zastepowane zmiennymi
@@ -337,30 +341,37 @@ function zen_get_products_manufacturers_name($product_id) {
                 $pdf->addLineFormat($cols);
                 $y = 89;
                 $countproductsonpo = 0;
+                $total_items = 0; $total_price = 0;  
                 for ($h = 0; $h < count($tmpt); $h++) {
                     $tm = $tmpt[$h][2];
                     $tm1 = $tmpt[$h][4];
                     $row9 = $db->Execute("SELECT products_model, products_name, final_price, products_quantity, products_id FROM " . TABLE_ORDERS_PRODUCTS . " WHERE orders_products_id='$tm'");
-                    $trescik = $tresc_robij1;
+                    $product_info = $tresc_robij1;
                     $manufacturernamed = zen_get_products_manufacturers_name($row9->fields['products_id']);
-                    $trescik = str_replace("{manufacturers_name}", $manufacturernamed, $trescik);
-                    $trescik = str_replace("{products_name}", $row9->fields['products_name'], $trescik);
-                    $trescik = str_replace("{products_model}", $row9->fields['products_model'], $trescik);
-                    $trescik = str_replace("{final_price}", $row9->fields['final_price'], $trescik);
-                    $trescik = str_replace("{products_quantity}", $row9->fields['products_quantity'], $trescik);
+                    $product_info = str_replace("{manufacturers_name}", $manufacturernamed, $product_info);
+                    if (defined('POSM_MODULE_VERSION')) {
+                       $row9->fields['products_name'] = preg_replace ('/\[.*\]/', '', $row9->fields['products_name']);
+                    }
+                    $product_info = str_replace("{item_number}", $h+1, $product_info);
+                    $product_info = str_replace("{products_name}", $row9->fields['products_name'], $product_info);
+                    $product_info = str_replace("{products_model}", $row9->fields['products_model'], $product_info);
+                    $product_info = str_replace("{final_price}", $row9->fields['final_price'], $product_info);
+                    $product_info = str_replace("{products_quantity}", $row9->fields['products_quantity'], $product_info);
+                    $total_items += $row9->fields['products_quantity']; 
+                    $total_price += ($row9->fields['final_price'] * $row9->fields['products_quantity']); 
                     $row9a = $db->Execute("SELECT orders_id, orders_products_id, products_options, products_options_values
                         FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . "
                         WHERE orders_products_id='$tm' AND orders_id='$tm1'");
                     $attributes = '';
                     while (!$row9a->EOF) {
-                        $attributes = $attributes . $row9a->fieldsa['products_options'] . ": " . $row9a->fieldsa['products_options_values'] . "\n";
+                        $attributes = $attributes . INDENT . $row9a->fields['products_options'] . ": " . $row9a->fields['products_options_values'] . "\n";
                         $row9a->MoveNext();
                     }
 
-                    $trescik = str_replace("{products_attributes}", $attributes, $trescik);
+                    $product_info = str_replace("{products_attributes}", zen_clean_html($attributes), $product_info);
 
-                    $tresc_ostateczna = $tresc_ostateczna . $trescik;
-                    $newzawartosc = $tmpt[0][3] . $tresc_ostateczna;
+                    $contents_final = $contents_final . $product_info;
+                    $newcontent = $tmpt[0][3] . $contents_final;
                     $line = array(PACKING_LIST_MODEL_NUMBER => $row9->fields['products_model'],
                         PACKING_LIST_PRODUCT_DESCRIPTION => $row9->fields['products_name'] . " " .
                             $attributes,
@@ -388,50 +399,67 @@ function zen_get_products_manufacturers_name($product_id) {
                 if ($row110->EOF) {
                     $kod = $kod . "1";
                 }
+                $newcontent = str_replace("{po_number}", $wielowymiar[$i][4] . "-" . $kod, $newcontent);
+     
+                // Build the email subject 
+                $title = PO_SUBJECT;
+                $title = str_replace("{po_number}", $wielowymiar[$i][4] . "-" . $kod, $title);
+                $title = str_replace("{contact_person}", $subcontractor->fields['contact_person'], $title);
+                $title = str_replace("{delivery_name}", $row4->fields['delivery_name'], $title);
+                $title = str_replace("{full_name}", $subcontractor->fields['name'], $title);
+                $title = str_replace("{alias}", $subcontractor->fields['alias'], $title);
+                $title = str_replace("{order_number}", $wielowymiar[$i][4], $title);
+                $title = str_replace("{purchase_date}", $wielowymiar[$i][4], $title);
 
-                $newzawartosc = str_replace("{po_number}", $wielowymiar[$i][4] . "-" . $kod, $newzawartosc);
-                $tematk = PO_SUBJECT;
-                $tematk = str_replace("{po_number}", $wielowymiar[$i][4] . "-" . $kod, $tematk);
-                $tematk = str_replace("{contact_person}", $subcontractor->fields['contact_person'], $tematk);
-                $tematk = str_replace("{full_name}", $subcontractor->fields['name'], $tematk);
-                $tematk = str_replace("{alias}", $subcontractor->fields['alias'], $tematk);
-                $tematk = str_replace("{order_number}", $wielowymiar[$i][4], $tematk);
-                $tematk = str_replace("{purchase_date}", $wielowymiar[$i][4], $tematk);
-                $tracking_link_1 = '<a href="' . HTTP_SERVER . DIR_WS_ADMIN . 'confirm_track_sub.php?x=' . $dlaemaila . '&y=' . $kod . '">' . HTTP_SERVER . DIR_WS_ADMIN . 'confirm_track_sub.php?x=' . $dlaemaila . '&y=' . $kod . '</a>';
+
+                // Build the tracking links
+                $tracking_link_1 = HTTP_SERVER . DIR_WS_ADMIN . 'confirm_track_sub.php?aID=' . $dlaemaila . '&oID=' . $kod; 
 
                 for ($t = 0; $t <= count($tracking_link); $t++) {
                     $tracking_link_good = $tracking_link_good . str_replace("{tracking_link}", $tracking_link_1, $tracking_link[$t]);
                 }
 
-                $newzawartosc = $newzawartosc . $tracking_link_good;
-                $newzawartosc = str_replace("{contact_person}", $subcontractor->fields['contact_person'], $newzawartosc);
-                $newzawartosc = str_replace("{full_name}", $subcontractor->fields['name'], $newzawartosc);
-                $newzawartosc = str_replace("{alias}", $subcontractor->fields['alias'], $newzawartosc);
-                $newzawartosc = str_replace("{subcontractors_id}", $subcontractor->fields['subcontractors_id'], $newzawartosc);
-                $newzawartosc = str_replace("{street}", $subcontractor->fields['street1'], $newzawartosc);
-                $newzawartosc = str_replace("{city}", $subcontractor->fields['city'], $newzawartosc);
-                $newzawartosc = str_replace("{state}", $subcontractor->fields['state'], $newzawartosc);
-                $newzawartosc = str_replace("{zip}", $subcontractor->fields['zip'], $newzawartosc);
-                $newzawartosc = str_replace("{telephone}", $subcontractor->fields['telephone'], $newzawartosc);
-                $newzawartosc = str_replace("{email_address}", $subcontractor->fields['email_address'], $newzawartosc);
+                $newcontent = $newcontent . $tracking_link_good;
+                $newcontent = str_replace("{contact_person}", $subcontractor->fields['contact_person'], $newcontent);
+                $newcontent = str_replace("{full_name}", $subcontractor->fields['name'], $newcontent);
+                $newcontent = str_replace("{alias}", $subcontractor->fields['alias'], $newcontent);
+                $newcontent = str_replace("{subcontractors_id}", $subcontractor->fields['subcontractors_id'], $newcontent);
+                $newcontent = str_replace("{street}", $subcontractor->fields['street1'], $newcontent);
+                $newcontent = str_replace("{city}", $subcontractor->fields['city'], $newcontent);
+                $newcontent = str_replace("{state}", $subcontractor->fields['state'], $newcontent);
+                $newcontent = str_replace("{zip}", $subcontractor->fields['zip'], $newcontent);
+                $newcontent = str_replace("{telephone}", $subcontractor->fields['telephone'], $newcontent);
+                $newcontent = str_replace("{email_address}", $subcontractor->fields['email_address'], $newcontent);
+                $newcontent = str_replace("{customers_email}", $row4->fields['customers_email_address'], "$newcontent");
                 if ($tmpt[0][7] != PO_CHANGE_SHIPPING_FROM) {
 
-                    $newzawartosc = str_replace("{shipping_method}", $tmpt[0][7], $newzawartosc);
+                    $newcontent = str_replace("{shipping_method}", $tmpt[0][7], $newcontent);
                 } else {
-                    $newzawartosc = str_replace("{shipping_method}", PO_CHANGE_SHIPPING_TO, $newzawartosc);
+                    $newcontent = str_replace("{shipping_method}", PO_CHANGE_SHIPPING_TO, $newcontent);
                 }
+                $newcontent = str_replace("{po_manager}", PO_FROM_EMAIL_NAME, $newcontent);
+                $newcontent = str_replace("{store_name}", STORE_NAME, $newcontent);
+                $newcontent = str_replace("{store_phone}", STORE_TELEPHONE_CUSTSERVICE, $newcontent);
+                $newcontent = str_replace("{store_url}", HTTP_CATALOG_SERVER . DIR_WS_CATALOG, $newcontent);
+                $newcontent = str_replace("{po_number}", $wielowymiar[$i][4] . "-" . $kod, $newcontent);
+                // $today_date = date('Y-m-d');
+                $today_date = date('Y-m-d h:i:s A');
+                $newcontent = str_replace("{date}", $today_date, $newcontent);
+                $newcontent = str_replace("{total_items}", $total_items, $newcontent);
+                $newcontent = str_replace("{total_price}", $currencies->format($total_price), $newcontent);
+                $newcontent = str_replace("{customers_comments}", $oatmeal->fields['comments'], $newcontent);
                 $passitw = $wielowymiar[$i][4];
                 $row978 = $db->Execute("SELECT orders_status FROM " . TABLE_ORDERS . " WHERE orders_id='$passitw'");
                 if ($row978->fields['orders_status'] == 1) {
                     $db->Execute("INSERT INTO " . TABLE_ORDERS_STATUS_HISTORY . "
                                 (orders_status_id, orders_id, date_added,
                                          customer_notified, comments)
-                                   values ('2','$tm1',now(),'0','" . PO_SENT_COMMENTS . "')");
-                    $db->Execute("UPDATE " . TABLE_ORDERS . " SET orders_status = '2', last_modified = now() WHERE orders_id = " . $tm1);
+                                   values ('" . POST_SEND_ORDER_STATUS . "','$tm1',now(),'0','" . PO_SENT_COMMENTS . "')");
+                    $db->Execute("UPDATE " . TABLE_ORDERS . " SET orders_status = '" . POST_SEND_ORDER_STATUS . "', last_modified = now() WHERE orders_id = " . $tm1);
                 }
                 //wysylanie e-maila
                 if (PURCHASEORDERS_DEBUG == 'Yes') {
-                    echo "<br>DEBUG--><br>From   :" . PO_FROM_EMAIL_NAME . " &lt;" . PO_FROM_EMAIL_ADDRESS . "&gt;<br>To     :" . $addressdo . "<br>Subject:" . $tematk . "<br>Content:<br>" . str_replace("\n", "<br>", $newzawartosc);
+                    echo "<br>DEBUG--><br>From   :" . PO_FROM_EMAIL_NAME . " &lt;" . PO_FROM_EMAIL_ADDRESS . "&gt;<br>To     :" . $addressdo . "<br>Subject:" . $title . "<br>Content:<br>" . str_replace("\n", "<br>", $newcontent);
                 }
                 if ($countproductsonpo != $countproducts)
                     $pdf->addNotes(SHIPPING_OPTION . ": " . $tmpt[0][7] . "\n\n" . PO_PARTIALSHIP_PACKINGLIST . "\n" . $_POST[plistcomments] . "\n" . "PO NUMBER:" . $wielowymiar[$i][4] . "-" . $kod);
@@ -443,10 +471,10 @@ function zen_get_products_manufacturers_name($product_id) {
                     <form name="editpo" action="send_pos.php" method="POST">
 <?php echo zen_hide_session_id(); ?>
                     <center><?php echo REVIEW_EMAIL_EMAIL_TITLE; ?>&nbsp;<input type="text" name="etitle" size="125"
-                                                                                value="<?php echo $tematk; ?>"/><br/><br/>
+                                                                                value="<?php echo $title; ?>"/><br/><br/>
                         <?php echo REVIEW_EMAIL_SEND_EMAIL_TO; ?>&nbsp;<input type="text" name="eaddress" size="125"
                                                                               value="<?php echo $addressdo; ?>"/><br/><br/>
-                        <textarea rows="30" name="ebody"><?php echo $newzawartosc; ?></textarea>
+                        <textarea rows="30" name="ebody"><?php echo $newcontent; ?></textarea>
                         <input type="hidden" name="includepackinglistoption"
                                value="<?php echo $_POST[includepackinglistoption]; ?>"/><input type="hidden"
                                                                                                name="ereview"
@@ -457,11 +485,11 @@ function zen_get_products_manufacturers_name($product_id) {
                     </form>
 <?php           } else {
                     $html_msg['EMAIL_MESSAGE_HTML'] = str_replace('
-', '<br />', $newzawartosc);
+', '<br />', $newcontent);
                     if ($_POST[includepackinglistoption] == 'yes')
-                        zen_mail($addressdo, $addressdo, $tematk, $newzawartosc, PO_FROM_EMAIL_NAME, PO_FROM_EMAIL_ADDRESS, $html_msg, NULL, PO_PACKINGLIST_FILENAME, 'application/pdf');
+                        zen_mail($addressdo, $addressdo, $title, $newcontent, PO_FROM_EMAIL_NAME, PO_FROM_EMAIL_ADDRESS, $html_msg, NULL, PO_PACKINGLIST_FILENAME, 'application/pdf');
                     else
-                        zen_mail($addressdo, $addressdo, $tematk, $newzawartosc, PO_FROM_EMAIL_NAME, PO_FROM_EMAIL_ADDRESS, $html_msg, NULL);
+                        zen_mail($addressdo, $addressdo, $title, $newcontent, PO_FROM_EMAIL_NAME, PO_FROM_EMAIL_ADDRESS, $html_msg, NULL);
                 }
                 $tracking_link_good = '';
                 $date = date('Y-m-d');
@@ -656,6 +684,9 @@ function zen_get_products_manufacturers_name($product_id) {
                         $row3 = $db->Execute("SELECT * FROM " . TABLE_ORDERS . " as o, " . TABLE_ORDERS_PRODUCTS . " as p WHERE o.orders_id = o.orders_id AND o.orders_id=" . (int)$row2->fields['orders_id']);
                         $row100 = $db->Execute("SELECT alias FROM " . TABLE_SUBCONTRACTORS_SHIPPING . " WHERE subcontractors_id=" . (int)$row2->fields['po_sent_to_subcontractor']);
 
+                        if (defined('POSM_MODULE_VERSION')) {
+                            $row2->fields['products_name'] = preg_replace ('/\[.*\]/', '', $row2->fields['products_name']);
+                        }
                         if ($i % 2 == 1) {
 
                             echo "<tr class='dataTableRowSelected'>" .
@@ -818,7 +849,7 @@ function zen_get_products_manufacturers_name($product_id) {
                         $skrypt = "send_pos.php?";
 
 
-                        $count_query = "SELECT p.orders_products_id, p.orders_id, p.orders_products_id, p.products_name, p.products_id, o.shipping_method, o.delivery_state, p.products_quantity, o.delivery_street_address, o.delivery_city, o.delivery_suburb, o.delivery_postcode, o.delivery_country, o.delivery_company, o.delivery_name, p.products_model FROM " . TABLE_ORDERS_PRODUCTS . " as p, " . TABLE_ORDERS . " as o WHERE  p.orders_id=o.orders_id AND po_sent='0' AND o.orders_status != 3 AND po_number  IS NULL";
+                        $count_query = "SELECT p.orders_products_id, p.orders_id, p.orders_products_id, p.products_name, p.products_id, o.shipping_method, o.delivery_state, p.products_quantity, o.delivery_street_address, o.delivery_city, o.delivery_suburb, o.delivery_postcode, o.delivery_country, o.delivery_company, o.delivery_name, p.products_model FROM " . TABLE_ORDERS_PRODUCTS . " as p, " . TABLE_ORDERS . " as o WHERE  p.orders_id=o.orders_id AND po_sent='0' AND " . PO_STATUS_FILTER . " AND po_number  IS NULL";
                         $queryxx = $db->Execute($count_query); 
 
                         $l_odp = $queryxx->RecordCount();
@@ -831,6 +862,9 @@ function zen_get_products_manufacturers_name($product_id) {
                             $rowpa = $db->Execute("SELECT orders_id, orders_products_id, products_options, products_options_values
                                 FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . "
                                 WHERE orders_products_id=" . $row2->fields['orders_products_id'] . " AND orders_id= "  .$row2->fields['orders_id']);
+                            if (defined('POSM_MODULE_VERSION')) {
+                               $row2->fields['products_name'] = preg_replace ('/\[.*\]/', '', $row2->fields['products_name']);
+                            }
                             $attributes = '';
                             while (!$rowpa->EOF) {
                                 $attributes = $attributes . "<br />" . $rowpa->fields['products_options'] . ": " . $rowpa->fields['products_options_values'];
