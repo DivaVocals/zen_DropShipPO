@@ -188,6 +188,11 @@ The following items have shipped:
 
 
                 zen_mail($email_to, $email_to, $subject, $message, STORE_NAME, EMAIL_FROM, $html_msg, NULL);
+
+                //send extra emails
+                if (SEND_EXTRA_ORDERS_STATUS_ADMIN_EMAILS_TO_STATUS == '1' and SEND_EXTRA_ORDERS_STATUS_ADMIN_EMAILS_TO != '') {
+                  zen_mail('', SEND_EXTRA_ORDERS_STATUS_ADMIN_EMAILS_TO, $subject, $message, STORE_NAME, EMAIL_FROM, $html_msg, NULL);
+                }
             } else {
                 $customer_notified = 0;
             }
