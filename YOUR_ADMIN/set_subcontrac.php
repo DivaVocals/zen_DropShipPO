@@ -21,6 +21,13 @@
 
 require('includes/application_top.php');
 require(DIR_WS_CLASSES . 'currencies.php');
+// Number of rows on the page
+define('DROPSHIP_MAX_ROWS', 200);
+// Whether to show inactive products
+define('DROPSHIP_SHOW_INACTIVE_PRODUCTS', false); 
+// How to do the sorting - if true, use model sorting, false use DROPSHIP_SORT
+define('DROPSHIP_USE_MODEL_SORT', false); 
+define('DROPSHIP_SORT', ' manufacturers_name, products_model '); 
 ?>
 <html <?php echo HTML_PARAMS; ?>>
 <head>
@@ -59,14 +66,18 @@ require(DIR_WS_CLASSES . 'currencies.php');
     //delete
 
 
-    if (isset($_GET['list_order'])) {
-        if ($_GET['list_order'] == 'modelname') $disp_order = "products_model ASC";
-        if ($_GET['list_order'] == 'modelnamedesc') $disp_order = "products_model DESC";
-
-
+    if (DROPSHIP_USE_MODEL_SORT) { 
+       if (isset($_GET['list_order'])) {
+           if ($_GET['list_order'] == 'modelname') $disp_order = "products_model ASC";
+           if ($_GET['list_order'] == 'modelnamedesc') $disp_order = "products_model DESC";
+   
+   
+       } else {
+   
+           $disp_order = "products_id ASC";
+       }
     } else {
-
-        $disp_order = "products_id ASC";
+           $disp_order = DROPSHIP_SORT;
     }
 
 
@@ -106,6 +117,7 @@ require(DIR_WS_CLASSES . 'currencies.php');
         <td valign="top" width='80%'>
             <table border="0" width='100%' cellspacing="2" cellpadding="0">
                 <tr class="dataTableHeadingRow">
+<?php if (DROPSHIP_USE_MODEL_SORT == true) { ?> 
                     <td width='5%' class="dataTableHeadingContent" align="left" valign="top">
                         <?php echo ID; ?>
                     </td>
@@ -124,12 +136,31 @@ require(DIR_WS_CLASSES . 'currencies.php');
                     <td width='20%' class="dataTableHeadingContent" align="left" valign='top'>
                         <?php echo TABLE_SET_SUBC_DEFAULT; ?><br>
                     </td>
+<?php  } else { ?>
+                    <td width='20%' class="dataTableHeadingContent" align='left' valign="top">
+                        <?php echo TABLE_SET_SUBC_MANUFACTURER; ?><br>
+                    </td>
+                    <td width='20%' class="dataTableHeadingContent" align="left">
+                        <?php echo TABLE_SET_SUBC_MODEL; ?><br>
+                    </td>
+                    <td width='5%' class="dataTableHeadingContent" align="left" valign="top">
+                        <?php echo ID; ?>
+                    </td>
+                    <td width='20%' class="dataTableHeadingContent" align="left" valign="top">
+                        <?php echo TABLE_SET_SUBC_PRODUCTS_NAME; ?><br>
+                    </td>
+
+                    <td width='20%' class="dataTableHeadingContent" align="left" valign='top'>
+                        <?php echo TABLE_SET_SUBC_DEFAULT; ?><br>
+                    </td>
+
+<?php  } ?>
 
                 </tr>
                 <form name='set' action='set_subcontrac.php?' method='post'>
 
                     <?php
-                    //wyswietlanie pola typu select dla odpowiednich subcotractorow
+                    // Display type of field
                     function sub($name)
                     {
                         global $db;
@@ -149,44 +180,58 @@ require(DIR_WS_CLASSES . 'currencies.php');
                         echo "</select>";
                     }
 
-                    //generowanie zmienncyh i przypisywanie zmiennych dla porcjowania danych
+                    // generate and assign variables for pagination
                     $a = $_GET["a"];
                     $l_odp_napasku = '10';
-                    $l_odp_nastronie = '20';
-                    $start = $a * $l_odp_nastronie;
+                    $start = $a * DROPSHIP_MAX_ROWS;
                     $i = 0;
+                    if (DROPSHIP_SHOW_INACTIVE_PRODUCTS) {
+                       $where = " 1=1 "; 
+                    } else { 
+                       $where = " products_status = 1 "; 
+                    } 
 
-                    //zapytanie ktore pobiera dane z bazy
-                    $row2 = $db->Execute("SELECT products_id, products_model, manufacturers_id FROM " . TABLE_PRODUCTS . " order by $disp_order LIMIT $start, $l_odp_nastronie");
-                    //zapytanie ktore pobiera ilosc wszystkich rekordow jakie spelnia warunki w tym zapytaniu dla porcjowania wynikow
-                    $query33 = $db->Execute("SELECT products_id, products_model, manufacturers_id FROM " . TABLE_PRODUCTS . "");
+                    // query the records 
+                    $row2 = $db->Execute("SELECT products_id, master_categories_id, products_type, products_model, manufacturers_name FROM " . TABLE_PRODUCTS . " p LEFT JOIN " . TABLE_MANUFACTURERS . " m ON p.manufacturers_id = m.manufacturers_id WHERE " . $where . " order by $disp_order LIMIT $start, " . DROPSHIP_MAX_ROWS);
+                    $query33 = $db->Execute("SELECT products_id, products_model, manufacturers_id FROM " . TABLE_PRODUCTS . " WHERE " . $where);
 
                     $l_odp = $query33->RecordCount();
 
-                    $row4 = $db->Execute("SELECT MAX(products_id) as max FROM " . TABLE_PRODUCTS . " LIMIT $start, $l_odp_nastronie");
+                    $row4 = $db->Execute("SELECT MAX(products_id) as max FROM " . TABLE_PRODUCTS . " LIMIT $start, " . DROPSHIP_MAX_ROWS);
 
                     echo "<input type='hidden' name='ilosc' value='$row4->fields['max']'>";
 
-                    //wyswietlanie tych rekordow
+                    // display the records
                     $i = 1;
                     while (!$row2->EOF) {
-                        $row3 = $db->Execute("SELECT manufacturers_id, manufacturers_name FROM " . TABLE_MANUFACTURERS . " WHERE manufacturers_id=" . $row2->fields['manufacturers_id']);
                         $row5 = $db->Execute("SELECT products_name  FROM " . TABLE_PRODUCTS_DESCRIPTION . " WHERE products_id=" . $row2->fields['products_id']);
 
+                        $manuf_id = $row2->fields['manufacturers_id']; 
+
+                        $cPath = $row2->fields['master_categories_id'];
+                        $type_handler = $zc_products->get_admin_handler($row2->fields['products_type']);
+                        $prid_link = '<a href="' . zen_href_link($type_handler , 'product_type=' . $row2->fields['products_type'] . '&cPath=' . $cPath . '&pID=' . $row2->fields['products_id'] . '&action=new_product') . '">' .$row2->fields['products_id'] . '</a>'; 
                         if ($i % 2 == 1) {
-                            echo "<tr class='dataTableRow'>" .
-                                "<td align='left'>" . $row2->fields['products_id'] . "</td><td align='left'>" . $row2->fields['products_model'] . "</td><td align='left'>" . $row5->fields['products_name'] . "</td><td  align='left'>" . $row3->fields['manufacturers_name'] . "</td><td align='left'>";
-                            sub($row2->fields['products_id']);
-                            echo "</td>" .
-                                "</tr><input type='hidden' name='$i' value='" . $row2->fields['products_id']. "'>";
+                          echo "<tr class='dataTableRow'>"; 
+                          if (DROPSHIP_USE_MODEL_SORT == true) { 
+                            echo "<td align='left'>" . $prid_link . "</td><td align='left'>" . $row2->fields['products_model'] . "</td><td align='left'>" . $row5->fields['products_name'] . "</td><td  align='left'>" . $row2->fields['manufacturers_name'] . "</td><td align='left'>";
+                          } else {
+                            echo "<td align='left'>" . $row2->fields['manufacturers_name'] . "</td><td align='left'>" . $row2->fields['products_model'] . "</td><td align='left'>" . $prid_link . "</td><td  align='left'>" . $row5->fields['products_name'] . "</td><td align='left'>";
+                          }
+                          sub($row2->fields['products_id']);
+                          echo "</td>";
+                          echo "</tr><input type='hidden' name='$i' value='" . $row2->fields['products_id']. "'>";
                         }
 
                         if ($i % 2 == 0) {
-                            echo "<tr class='dataTableRowSelected'>" .
-                                "<td align='left'>" . $row2->fields['products_id'] . "</td><td align='left'>" . $row2->fields['products_model'] . "</td><td align='left'>" . $row5->fields['products_name'] . "</td><td  align='left'>". $row3->fields['manufacturers_name']. "</td><td align='left'>";
-
+                          echo "<tr class='dataTableRowSelected'>"; 
+                          if (DROPSHIP_USE_MODEL_SORT == true) { 
+                            echo "<td align='left'>" . $prid_link . "</td><td align='left'>" . $row2->fields['products_model'] . "</td><td align='left'>" . $row5->fields['products_name'] . "</td><td  align='left'>". $row2->fields['manufacturers_name'] . "</td><td align='left'>";
+                          } else { 
+                            echo "<td align='left'>" . $row2->fields['manufacturers_name'] . "</td><td align='left'>" . $row2->fields['products_model'] . "</td><td align='left'>" . $prid_link . "</td><td  align='left'>" . $row5->fields['products_name'] . "</td><td align='left'>";
+                          }
                             sub($row2->fields['products_id']);
-                            echo "</td>" .
+                            echo "</td>" . 
                                 "</tr><input type='hidden' name='$i' value='" . $row2->fields['products_id'] . "'>";
                             echo "</td>" .
                                 "</tr><input type='hidden' name='" . $i ."' value='" . $row2->fields['products_id']. "'>";
@@ -199,7 +244,7 @@ require(DIR_WS_CLASSES . 'currencies.php');
                     //ustawienie adresu
                     $skrypt = "set_subcontrac.php?";
                     //uruchomienie funkcji porcjujacej dane
-                    pasek($l_odp, $l_odp_nastronie, $l_odp_napasku, $skrypt, $a);
+                    pasek($l_odp, DROPSHIP_MAX_ROWS, $l_odp_napasku, $skrypt, $a);
                     ?>
                 </form>
                 <tr>
