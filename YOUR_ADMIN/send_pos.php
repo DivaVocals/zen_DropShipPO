@@ -105,6 +105,22 @@ function zen_get_products_manufacturers_name($product_id) {
         } else { 
             zen_mail($_POST[eaddress], $_POST[eaddress], $_POST[etitle], $_POST[ebody], PO_FROM_EMAIL_NAME, PO_FROM_EMAIL_ADDRESS, $html_msg, NULL);
        }
+       // FIX2 - Update DB after single send
+       $kod = zen_db_input($_POST['kod']);
+       $tm2 = zen_db_input($_POST['tm2']);
+       $date = date('Y-m-d');
+       $tm = zen_db_input($_POST['tm']);
+       $tm1 = zen_db_input($_POST['tm1']);
+       $db->Execute("UPDATE " . TABLE_ORDERS_PRODUCTS . " SET po_sent='1', item_shipped=0, po_number='$kod', po_sent_to_subcontractor='$tm2', po_date='$date' WHERE  orders_products_id='$tm' LIMIT 1");
+       // now update orders_status and history
+       $row978 = $db->Execute("SELECT orders_status FROM " . TABLE_ORDERS . " WHERE orders_id='$tm1'");
+       if ($row978->fields['orders_status'] == 1) {
+           $db->Execute("INSERT INTO " . TABLE_ORDERS_STATUS_HISTORY . "
+                       (orders_status_id, orders_id, date_added,
+                                customer_notified, comments)
+                          values ('" . POST_SEND_ORDER_STATUS . "','$tm1',now(),'0','" . PO_SENT_COMMENTS . "')");
+           $db->Execute("UPDATE " . TABLE_ORDERS . " SET orders_status = '" . POST_SEND_ORDER_STATUS . "', last_modified = now() WHERE orders_id = " . $tm1);
+       }
     }
 
 
@@ -449,13 +465,15 @@ function zen_get_products_manufacturers_name($product_id) {
                 $newcontent = str_replace("{total_price}", $currencies->format($total_price), $newcontent);
                 $newcontent = str_replace("{customers_comments}", $oatmeal->fields['comments'], $newcontent);
                 $passitw = $wielowymiar[$i][4];
-                $row978 = $db->Execute("SELECT orders_status FROM " . TABLE_ORDERS . " WHERE orders_id='$passitw'");
-                if ($row978->fields['orders_status'] == 1) {
-                    $db->Execute("INSERT INTO " . TABLE_ORDERS_STATUS_HISTORY . "
-                                (orders_status_id, orders_id, date_added,
-                                         customer_notified, comments)
-                                   values ('" . POST_SEND_ORDER_STATUS . "','$tm1',now(),'0','" . PO_SENT_COMMENTS . "')");
-                    $db->Execute("UPDATE " . TABLE_ORDERS . " SET orders_status = '" . POST_SEND_ORDER_STATUS . "', last_modified = now() WHERE orders_id = " . $tm1);
+                if (!($_POST[reviewthensend] == 'yes')) {
+                   $row978 = $db->Execute("SELECT orders_status FROM " . TABLE_ORDERS . " WHERE orders_id='$passitw'");
+                   if ($row978->fields['orders_status'] == 1) {
+                       $db->Execute("INSERT INTO " . TABLE_ORDERS_STATUS_HISTORY . "
+                                   (orders_status_id, orders_id, date_added,
+                                            customer_notified, comments)
+                                      values ('" . POST_SEND_ORDER_STATUS . "','$tm1',now(),'0','" . PO_SENT_COMMENTS . "')");
+                       $db->Execute("UPDATE " . TABLE_ORDERS . " SET orders_status = '" . POST_SEND_ORDER_STATUS . "', last_modified = now() WHERE orders_id = " . $tm1);
+                   }
                 }
                 //wysylanie e-maila
                 if (PURCHASEORDERS_DEBUG == 'Yes') {
@@ -482,7 +500,7 @@ function zen_get_products_manufacturers_name($product_id) {
                         <input class="normal_button button" type="button" value="<?php echo IMAGE_SEND; ?>"
                                name='insert' ONCLICK="javascript:document.editpo.submit();"><br/><br/>
                         <?php echo REVIEW_AND_SUBMIT_WARNING; ?></center>
-                    </form>
+                <!-- form will close later -->
 <?php           } else {
                     $html_msg['EMAIL_MESSAGE_HTML'] = str_replace('
 ', '<br />', $newcontent);
@@ -495,17 +513,23 @@ function zen_get_products_manufacturers_name($product_id) {
                 $date = date('Y-m-d');
 // unlink($pdffilename); 
 
-// FIXME - it would be ideal if the db were not updated prior to the 
-// email actually being sent, but this requires a few more changes - 
-// will do this later.
-                // if (!($_POST[reviewthensend] == 'yes')) {
+       // FIX1 - Do not update db if review requested. 
+                if (!($_POST[reviewthensend] == 'yes')) {
                    for ($m = 0; $m < count($tmpt); $m++) {
                        $tm = $tmpt[$m][2];
                        $tm2 = $tmpt[$m][0];
    
                        $db->Execute("UPDATE " . TABLE_ORDERS_PRODUCTS . " SET po_sent='1', item_shipped=0, po_number='$kod', po_sent_to_subcontractor='$tm2', po_date='$date' WHERE  orders_products_id='$tm' LIMIT 1");
                    }
-                // }
+                } else {
+               $tm = $tmpt[0][2];
+               $tm2 = $tmpt[0][0];
+               echo '<input type="hidden" name="kod" value="'. $kod . '">'; 
+               echo '<input type="hidden" name="tm2" value="'. $tm2. '">'; 
+               echo '<input type="hidden" name="tm" value="'. $tm. '">'; 
+               echo '<input type="hidden" name="tm1" value="'. $tm1. '">'; 
+               echo '</form>'; 
+                }
             }
         }
     }
